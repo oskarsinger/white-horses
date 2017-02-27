@@ -5,6 +5,7 @@ setup(
     version='0.01',
     packages=[
         'data',
+        'data.raw',
         'data.errors',
         'data.loaders',
         'data.loaders.e4',
