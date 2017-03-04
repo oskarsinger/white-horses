@@ -18,7 +18,6 @@ class DTCWTMask:
         save_load_path,
         period=3600,
         max_freqs=7,
-        padded=True,
         pr=False,
         magnitude=False,
         serve_one_period=True,
@@ -28,23 +27,18 @@ class DTCWTMask:
 
         # For now, assume server is batch-style
         self.ds = ds
+        self.overlap = overlap
         self.period = period
-        self.overlap = self.period / 2 if overlap else None
         self.hertz = self.ds.get_status()['data_loader'].get_status()['hertz']
         self.max_freqs = max_freqs
         self.save_load_path = save_load_path
-        self.padded = padded
         self.pr = pr
         self.magnitude = magnitude
         self.serve_one_period = serve_one_period
         self.load = load
         self.save = save
 
-        if self.overlap is None:
-            self.window = int(self.period * self.hertz)
-        else:
-            self.window = int(self.overlap * self.hertz)
-
+        self.window = int(self.period * self.hertz)
         self.num_freqs = min([
             int(log(self.window, 2)) - 1,
             self.max_freqs])
@@ -77,31 +71,60 @@ class DTCWTMask:
             num_batches = len(hdf5_repo)
         elif self.save:
             data = self.ds.get_data()
-            num_rows = int(float(data.shape[0]) / self.window)
-            num_batches = num_rows \
-                if self.overlap is None else \
-                num_rows - 1 
+            num_batches = int(float(data.shape[0]) / self.period)
             data = np.reshape(
                 get_array_mod(data, self.window),
-                (num_rows, self.window))
+                (num_batches, self.window))
             hdf5_repo = h5py.File(
                 self.save_load_path, 'w')
 
         self.num_batches = num_batches
         self.data = data
         self.hdf5_repo = hdf5_repo
+        self.current_w = None
 
     def get_data(self):
 
         wavelets = None
 
         if self.serve_one_period:
-            wavelets = self._get_one_period(self.num_rounds)
+            new_w = self._get_one_period(self.num_rounds)
 
             self.num_rounds += 1
+
+            if self.overlap:
+                if self.num_rounds == 1:
+                    wavelets = new_w[:,:self.period]
+                elif self.num_rounds < self.num_batches - 1:
+                    w1 = self.current_w[:,self.period:]
+                    w2 = new_w[:,:self.period]
+                    wavelets = w1 + w2 / 2
+                else:
+                    wavelets = new_w[:,self.period:] 
+
+                self.current_w = new_w
+            else:
+                wavelets = new_w
+
         else:
             wavelets = [self._get_one_period(i)
                         for i in xrange(self.num_batches)]
+
+            if self.overlap:
+                averaged = [
+                    wavelets[0][:,:self.period]]
+                pairs = zip(
+                    [None] + wavelets,
+                    wavelets + [None])[1:-1]
+
+                for (w1, w2) in pairs:
+                    averaged.append(
+                        w1[:,self.period:] + w2[:,:self.period] / 2)
+                    
+                averaged.append(
+                    wavelets[-1][:,self.period:])
+
+                wavelets = averaged
 
         return wavelets
 
@@ -117,13 +140,11 @@ class DTCWTMask:
             Yl = np.array(group['Yl'])
             wavelets = (Yh, Yl)
         else:
-            data = None
+            data = self.data[i:,][:,np.newaxis]
 
-            if self.overlap is None:
-                data = self.data[i,:][:,np.newaxis]
-            else:
+            if self.overlap and i < self.num_batches - 1:
                 data = np.vstack([
-                    self.data[i,:][:,np.newaxis],
+                    data,
                     self.data[i+1,:][:,np.newaxis]])
 
             (Yl, Yh, _) = dtcwt.oned.dtwavexfm(
@@ -148,23 +169,12 @@ class DTCWTMask:
                     'Yl', data=freq)
 
         if self.pr:
-            wavelets = get_pr(Yh, Yl, self.biorthogonal, self.qshift)
+            (Yh, Yl) = get_pr(Yh, Yl, self.biorthogonal, self.qshift)
 
-            if self.padded:
-                wavelets = get_pw(wavelets[:-1], wavelets[-1])
-        else:
-            if self.padded:
-                wavelets = get_pw(Yh, Yl)
-            else:
-                wavelets = Yh + [Yl]
+        wavelets = get_pw(Yh_prs, Yl_pr)
 
         if self.magnitude:
-            if self.padded:
-                wavelets = np.absolute(wavelets)
-            else:
-                Yl = wavelets[-1]
-                Yh = [np.absolute(w) for w in waveletes[:-1]]
-                wavelets = Yhs + [Yl]
+            wavelets = np.absolute(wavelets)
 
         return wavelets
 
@@ -181,6 +191,7 @@ class DTCWTMask:
         self.ds.refresh()
 
         self.num_rounds = 0
+        self.current_w = None
 
     def get_status(self):
         
@@ -190,7 +201,6 @@ class DTCWTMask:
             'hertz': self.hertz,
             'max_freqs': self.max_freqs,
             'save_load_path': self.save_load_path,
-            'padded': self.padded,
             'pr': self.pr,
             'load': self.load,
             'save': self.save,
