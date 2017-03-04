@@ -1,6 +1,6 @@
 import numpy as np
 
-from data.pseudodata import ThresholdEvent
+from whitehorses.pseudodata import ThresholdEvent
 
 class ThresholdEventMask:
 

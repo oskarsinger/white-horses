@@ -1,6 +1,6 @@
 import numpy as np
 
-from data.utils import get_minibatch
+from whitehorses.utils import get_minibatch
 
 class LinearRegressionGaussianLoader:
 

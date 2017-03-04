@@ -7,9 +7,9 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
-import data.loaders.shortcuts as dlstcts
+import whitehorses.loaders.shortcuts as dlstcts
 
-from data.servers.batch import BatchServer as BS
+from whitehorses.servers.batch import BatchServer as BS
 from lazyprojector import plot_lines
 from drrobert.file_io import get_timestamped as get_ts
 

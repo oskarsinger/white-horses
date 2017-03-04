@@ -6,11 +6,11 @@ matplotlib.use('Cairo')
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
-import data.loaders.shortcuts as dlstcts
-import data.loaders.e4.utils as e4u
+import whitehorses.loaders.shortcuts as dlstcts
+import whitehorses.loaders.e4.utils as e4u
 
-from data.servers.batch import BatchServer as BS
-from data.servers.masks import Interp1DMask as I1DM
+from whitehorses.servers.batch import BatchServer as BS
+from whitehorses.servers.masks import Interp1DMask as I1DM
 from drrobert.ts import get_dt_index
 from drrobert.file_io import get_timestamped as get_ts
 

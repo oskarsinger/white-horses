@@ -1,4 +1,4 @@
-from data.pseudodata import MissingData
+from whitehorses.pseudodata import MissingData
 from linal.utils import get_array_mod
 from math import ceil
 from datetime import datetime as DT

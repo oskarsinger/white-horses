@@ -1,4 +1,4 @@
-from data.pseudodata import MissingData
+from whitehorses.pseudodata import MissingData
 from math import ceil, floor
 from datetime import datetime as DT
 

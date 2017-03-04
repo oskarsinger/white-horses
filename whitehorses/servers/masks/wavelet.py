@@ -1,12 +1,13 @@
 import h5py
 import os
+import dtcwt
 
 import numpy as np
-import wavelets.dtcwt as dtcwt
 
 from drrobert.file_io import get_timestamped as get_ts
-from wavelets.dtcwt.utils import get_padded_wavelets as get_pw
-from wavelets.dtcwt.oned import get_partial_reconstructions as get_pr
+from dtcwt.utils import get_padded_wavelets as get_pw
+from dtcwt.utils import get_wavelet_basis as get_wb
+from dtcwt.oned import get_partial_reconstructions as get_pr
 from linal.utils.misc import get_array_mod
 from math import log
 
@@ -42,10 +43,8 @@ class DTCWTMask:
             int(log(self.window, 2)) - 1,
             self.max_freqs])
         self.num_rounds = 0
-        self.biorthogonal = dtcwt.utils.get_wavelet_basis(
-            'near_sym_b')
-        self.qshift = dtcwt.utils.get_wavelet_basis(
-            'qshift_b')
+        self.biorthogonal = get_wb('near_sym_b')
+        self.qshift = get_wb('qshift_b')
 
         # Probably put all this is a separate func
         data = None

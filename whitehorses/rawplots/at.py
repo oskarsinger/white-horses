@@ -5,9 +5,9 @@ matplotlib.use('Cairo')
 import numpy as np
 import pandas as pd
 import seaborn as sns
-import data.loaders.shortcuts as dlstcts
+import whitehorses.loaders.shortcuts as dlstcts
 
-from data.servers.batch import BatchServer as BS
+from whitehorses.servers.batch import BatchServer as BS
 from linal.utils.misc import get_non_nan
 from lazyprojector import plot_lines
 
