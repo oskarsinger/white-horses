@@ -22,12 +22,14 @@ class DTCWTMask:
         pr=False,
         magnitude=False,
         serve_one_period=True,
+        overlap=False,
         load=False,
         save=False):
 
         # For now, assume server is batch-style
         self.ds = ds
         self.period = period
+        self.overlap = self.period / 2 if overlap else None
         self.hertz = self.ds.get_status()['data_loader'].get_status()['hertz']
         self.max_freqs = max_freqs
         self.save_load_path = save_load_path
@@ -38,7 +40,11 @@ class DTCWTMask:
         self.load = load
         self.save = save
 
-        self.window = int(self.period * self.hertz)
+        if self.overlap is None:
+            self.window = int(self.period * self.hertz)
+        else:
+            self.window = int(self.overlap * self.hertz)
+
         self.num_freqs = min([
             int(log(self.window, 2)) - 1,
             self.max_freqs])
@@ -68,19 +74,20 @@ class DTCWTMask:
             hdf5_repo = h5py.File(
                 self.save_load_path, 'r')
             data = None
-
-            self.num_batches = len(hdf5_repo)
+            num_batches = len(hdf5_repo)
         elif self.save:
             data = self.ds.get_data()
-
-            self.num_batches = int(float(data.shape[0]) / self.window)
-
+            num_rows = int(float(data.shape[0]) / self.window)
+            num_batches = num_rows \
+                if self.overlap is None else \
+                num_rows - 1 
             data = np.reshape(
                 get_array_mod(data, self.window),
-                (self.num_batches, self.window))
+                (num_rows, self.window))
             hdf5_repo = h5py.File(
                 self.save_load_path, 'w')
 
+        self.num_batches = num_batches
         self.data = data
         self.hdf5_repo = hdf5_repo
 
@@ -110,8 +117,17 @@ class DTCWTMask:
             Yl = np.array(group['Yl'])
             wavelets = (Yh, Yl)
         else:
+            data = None
+
+            if self.overlap is None:
+                data = self.data[i,:][:,np.newaxis]
+            else:
+                data = np.vstack([
+                    self.data[i,:][:,np.newaxis],
+                    self.data[i+1,:][:,np.newaxis]])
+
             (Yl, Yh, _) = dtcwt.oned.dtwavexfm(
-                self.data[i,:][:,np.newaxis],
+                data,
                 self.num_freqs - 1,
                 self.biorthogonal,
                 self.qshift)
