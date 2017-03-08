@@ -1,7 +1,4 @@
 import os
-import matplotlib
-
-matplotlib.use('Cairo')
 
 import numpy as np
 import matplotlib.pyplot as plt

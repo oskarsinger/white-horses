@@ -1,7 +1,4 @@
 import click
-import matplotlib
-
-matplotlib.use('Cairo')
 
 import numpy as np
 import seaborn as sns

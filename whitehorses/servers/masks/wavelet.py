@@ -71,7 +71,7 @@ class DTCWTMask:
             num_batches = len(hdf5_repo)
         elif self.save:
             data = self.ds.get_data()
-            num_batches = int(float(data.shape[0]) / self.period)
+            num_batches = int(float(data.shape[0]) / self.window)
             data = np.reshape(
                 get_array_mod(data, self.window),
                 (num_batches, self.window))
@@ -140,7 +140,7 @@ class DTCWTMask:
             Yl = np.array(group['Yl'])
             wavelets = (Yh, Yl)
         else:
-            data = self.data[i:,][:,np.newaxis]
+            data = self.data[i,:][:,np.newaxis]
 
             if self.overlap and i < self.num_batches - 1:
                 data = np.vstack([
@@ -171,7 +171,7 @@ class DTCWTMask:
         if self.pr:
             (Yh, Yl) = get_pr(Yh, Yl, self.biorthogonal, self.qshift)
 
-        wavelets = get_pw(Yh_prs, Yl_pr)
+        wavelets = get_pw(Yh, Yl)
 
         if self.magnitude:
             wavelets = np.absolute(wavelets)
