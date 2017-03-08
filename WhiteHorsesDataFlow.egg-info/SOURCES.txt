@@ -40,6 +40,7 @@ whitehorses/servers/batch/batch.py
 whitehorses/servers/gram/__init__.py
 whitehorses/servers/gram/batch.py
 whitehorses/servers/gram/online.py
+whitehorses/servers/gram/utils.py
 whitehorses/servers/masks/__init__.py
 whitehorses/servers/masks/interpolate.py
 whitehorses/servers/masks/percentile.py

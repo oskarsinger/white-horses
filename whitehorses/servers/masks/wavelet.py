@@ -101,7 +101,7 @@ class DTCWTMask:
                     w2 = new_w[:self.w_window,:]
                     wavelets = w1 + w2 / 2
                 else:
-                    wavelets = new_w[self.w_window:,:]
+                    wavelets = new_w
 
                 self.current_w = new_w
             else:
