@@ -12,6 +12,7 @@ from .e4 import FixedRateLoader as FRL
 from .supervised import LinearRegressionGaussianLoader as LRGL
 from .readers import from_num as fn
 from .at import AlTestSpikeLoader as ATSL
+from .at import AlTestRampGenerator as ATRG
 from .rl import ExposureShiftedGaussianWithBaselineEffectLoader as ESGWBEL
 from drrobert.random import rademacher
 
