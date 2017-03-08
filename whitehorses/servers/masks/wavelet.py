@@ -39,6 +39,7 @@ class DTCWTMask:
         self.save = save
 
         self.window = int(self.period * self.hertz)
+        self.w_window = int(self.window / 2)
         self.num_freqs = min([
             int(log(self.window, 2)) - 1,
             self.max_freqs])
@@ -89,18 +90,18 @@ class DTCWTMask:
 
         if self.serve_one_period:
             new_w = self._get_one_period(self.num_rounds)
-
+            
             self.num_rounds += 1
 
             if self.overlap:
                 if self.num_rounds == 1:
-                    wavelets = new_w[:,:self.period]
+                    wavelets = new_w[:self.w_window,:]
                 elif self.num_rounds < self.num_batches - 1:
-                    w1 = self.current_w[:,self.period:]
-                    w2 = new_w[:,:self.period]
+                    w1 = self.current_w[self.w_window:,:]
+                    w2 = new_w[:self.w_window,:]
                     wavelets = w1 + w2 / 2
                 else:
-                    wavelets = new_w[:,self.period:] 
+                    wavelets = new_w[self.w_window:,:]
 
                 self.current_w = new_w
             else:
@@ -112,17 +113,17 @@ class DTCWTMask:
 
             if self.overlap:
                 averaged = [
-                    wavelets[0][:,:self.period]]
+                    wavelets[0][:self.w_window,:]]
                 pairs = zip(
                     [None] + wavelets,
                     wavelets + [None])[1:-1]
 
                 for (w1, w2) in pairs:
                     averaged.append(
-                        w1[:,self.period:] + w2[:,:self.period] / 2)
+                        w1[self.w_window:,:] + w2[:self.w_window,:] / 2)
                     
                 averaged.append(
-                    wavelets[-1][:,self.period:])
+                    wavelets[-1][self.w_window:,:])
 
                 wavelets = averaged
 
