@@ -1,4 +1,4 @@
-import utils
+from . import utils
 
-from fixed_rate import FixedRateLoader
-from ibi import IBILoader
+from .fixed_rate import FixedRateLoader
+from .ibi import IBILoader

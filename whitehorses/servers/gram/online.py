@@ -1,7 +1,7 @@
 import numpy as np
 
 from drrobert.data_structures import FixedLengthQueue as FLQ
-from optimization.utils import get_gram as gg
+from .utils import get_gram as gg
 
 class SumGramServer:
 

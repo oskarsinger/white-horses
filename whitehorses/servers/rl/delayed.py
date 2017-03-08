@@ -1,4 +1,4 @@
-from action_reward import AbstractActionRewardServer
+from .action_reward import AbstractActionRewardServer
 
 class StochasticDelayOneTimeRewardServer(AbstractActionRewardServer):
 

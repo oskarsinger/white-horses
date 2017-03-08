@@ -1,6 +1,6 @@
 import numpy as np
 
-from gaussian import GaussianLoader
+from .gaussian import GaussianLoader
 
 class FakePeriodicGaussianLoader:
 

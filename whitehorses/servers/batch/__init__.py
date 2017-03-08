@@ -1,1 +1,1 @@
-from batch import BatchServer
+from .batch import BatchServer

@@ -1,2 +1,2 @@
-from batch2minibatch import Batch2Minibatch
-from stream2minibatch import Minibatch2Minibatch
+from .batch2minibatch import Batch2Minibatch
+from .stream2minibatch import Minibatch2Minibatch

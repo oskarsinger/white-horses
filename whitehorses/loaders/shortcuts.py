@@ -4,15 +4,15 @@ import os
 import numpy as np
 import drrobert.network as drn
 
-from simple import CosineLoader as CL
-from simple import FakePeriodicGaussianLoader as FPGL
-from simple import GaussianLoader as GL
-from simple import BatchPhysiologicalTimeSeriesLoader as BPTSL
-from e4 import FixedRateLoader as FRL
-from supervised import LinearRegressionGaussianLoader as LRGL
-from readers import from_num as fn
-from at import AlTestSpikeLoader as ATSL
-from rl import ExposureShiftedGaussianWithBaselineEffectLoader as ESGWBEL
+from .simple import CosineLoader as CL
+from .simple import FakePeriodicGaussianLoader as FPGL
+from .simple import GaussianLoader as GL
+from .simple import BatchPhysiologicalTimeSeriesLoader as BPTSL
+from .e4 import FixedRateLoader as FRL
+from .supervised import LinearRegressionGaussianLoader as LRGL
+from .readers import from_num as fn
+from .at import AlTestSpikeLoader as ATSL
+from .rl import ExposureShiftedGaussianWithBaselineEffectLoader as ESGWBEL
 from drrobert.random import rademacher
 
 def get_er_ESGWBEL(

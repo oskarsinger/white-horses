@@ -1,1 +1,1 @@
-from gmm import MixtureModelGaussianLoader
+from .gmm import MixtureModelGaussianLoader

@@ -1,1 +1,1 @@
-from network import ExposureShiftedGaussianWithBaselineEffectLoader
+from .network import ExposureShiftedGaussianWithBaselineEffectLoader

@@ -24,7 +24,7 @@ def get_symptom_status(subject):
     elif subject in W:
         status = 'W'
     else:
-	status = 'U'
+        status = 'U'
 
     return status
 

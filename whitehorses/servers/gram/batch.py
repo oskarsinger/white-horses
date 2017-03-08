@@ -1,4 +1,4 @@
-from optimization.utils import get_gram as gg
+from .utils import get_gram as gg
 
 import numpy as np
 

@@ -1,2 +1,2 @@
-import from_num
-import from_string
+from . import from_num
+from . import from_string
