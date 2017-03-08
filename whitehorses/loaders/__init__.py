@@ -1,9 +1,9 @@
-import e4
-import readers
-import at
-import rl
-import supervised
-import simple
-import mixture
+from . import e4
+from . import readers
+from . import at
+from . import rl
+from . import supervised
+from . import simple
+from . import mixture
 
-import shortcuts
+from . import shortcuts

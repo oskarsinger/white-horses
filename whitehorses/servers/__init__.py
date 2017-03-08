@@ -1,5 +1,5 @@
-import rl
-import gram
-import minibatch
-import batch
-import masks
+from . import rl
+from . import gram
+from . import minibatch
+from . import batch
+from . import masks

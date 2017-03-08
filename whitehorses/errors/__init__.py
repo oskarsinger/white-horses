@@ -1,1 +1,1 @@
-from eos import EOSError
+from .eos import EOSError

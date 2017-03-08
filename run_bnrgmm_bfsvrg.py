@@ -16,7 +16,7 @@ def run_it_all_day_bb(
     num_nodes,
     max_rounds):
 
-    inv_powers = list(xrange(5,10))
+    inv_powers = list(range(5,10))
     graph_ps = [0.5, 0.9]
     budgets = [5, 50]
     data_map = {}
@@ -45,7 +45,7 @@ def run_it_all_day_bb(
                           if not s == s_hat]
                 num_errors = sum(errors)
 
-                print 'ERRORS', num_errors
+                print( 'ERRORS', num_errors )
 
                 objs = np.array(runner.objectives)
                 obj_means = np.sum(objs, axis=0)[:,np.newaxis]

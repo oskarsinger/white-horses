@@ -1,7 +1,7 @@
 from distutils.core import setup
 
 setup(
-    name='whitehorses',
+    name='WhiteHorsesDataFlow',
     version='0.01',
     packages=[
         'whitehorses',

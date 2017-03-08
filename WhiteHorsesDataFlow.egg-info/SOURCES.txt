@@ -1,10 +1,10 @@
+WhiteHorsesDataFlow.egg-info/PKG-INFO
+WhiteHorsesDataFlow.egg-info/SOURCES.txt
+WhiteHorsesDataFlow.egg-info/dependency_links.txt
+WhiteHorsesDataFlow.egg-info/top_level.txt
 whitehorses/__init__.py
 whitehorses/pseudodata.py
 whitehorses/utils.py
-whitehorses.egg-info/PKG-INFO
-whitehorses.egg-info/SOURCES.txt
-whitehorses.egg-info/dependency_links.txt
-whitehorses.egg-info/top_level.txt
 whitehorses/errors/__init__.py
 whitehorses/errors/eos.py
 whitehorses/loaders/__init__.py

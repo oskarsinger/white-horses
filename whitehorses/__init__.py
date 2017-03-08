@@ -1,4 +1,4 @@
-import pseudodata
-import servers
-import loaders
-import rawplots
+from . import pseudodata
+from . import servers
+from . import loaders
+from . import rawplots
