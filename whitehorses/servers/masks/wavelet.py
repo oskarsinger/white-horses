@@ -170,7 +170,6 @@ class DTCWTMask:
 
     def _save(self, i, Yh, Yl):
 
-        (Yh, Yl) = wavelets
         key = str(i)
         
         self.hdf5_repo.create_group(key)
