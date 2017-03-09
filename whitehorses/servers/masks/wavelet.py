@@ -131,43 +131,15 @@ class DTCWTMask:
 
     def _get_one_period(self, i):
 
-        wavelets = None
+        (Yh, Yl) = [None] * 2
 
         if self.load:
-            group = self.hdf5_repo[str(i)]
-            num_Yh = len(group) - 1
-            Yh = [np.array(group['Yh_' + str(j)]) 
-                  for j in range(num_Yh)]
-            Yl = np.array(group['Yl'])
-            wavelets = (Yh, Yl)
+            (Yh, Yl) = self._load_wavelets(i)
         else:
-            data = self.data[i,:][:,np.newaxis]
-
-            if self.overlap and i < self.num_batches - 1:
-                data = np.vstack([
-                    data,
-                    self.data[i+1,:][:,np.newaxis]])
-
-            (Yl, Yh, _) = dtcwt.oned.dtwavexfm(
-                data,
-                self.num_freqs - 1,
-                self.biorthogonal,
-                self.qshift)
-            wavelets = (Yh, Yl)
+            (Yh, Yl) = self._get_new_wavelets(i)
 
             if self.save:
-                key = str(i)
-                
-                self.hdf5_repo.create_group(key)
-
-                group = self.hdf5_repo[key]
-
-                for (j, freq) in enumerate(Yh):
-                    group.create_dataset(
-                        'Yh_' + str(j), data=freq)
-
-                group.create_dataset(
-                    'Yl', data=freq)
+                self._save(i, Yh, Yl)
 
         if self.pr:
             (Yh, Yl) = get_pr(Yh, Yl, self.biorthogonal, self.qshift)
@@ -178,6 +150,48 @@ class DTCWTMask:
             wavelets = np.absolute(wavelets)
 
         return wavelets
+
+    def _get_new_wavelets(self, i):
+
+        data = self.data[i,:][:,np.newaxis]
+
+        if self.overlap and i < self.num_batches - 1:
+            data = np.vstack([
+                data,
+                self.data[i+1,:][:,np.newaxis]])
+
+        (Yl, Yh, _) = dtcwt.oned.dtwavexfm(
+            data,
+            self.num_freqs - 1,
+            self.biorthogonal,
+            self.qshift)
+
+        return (Yh, Yl)
+
+    def _save(self, i, Yh, Yl):
+
+        (Yh, Yl) = wavelets
+        key = str(i)
+        
+        self.hdf5_repo.create_group(key)
+
+        group = self.hdf5_repo[key]
+
+        for (j, freq) in enumerate(Yh):
+            group.create_dataset(
+                'Yh_' + str(j), data=freq)
+            group.create_dataset(
+                'Yl', data=freq)
+
+    def _load_wavelets(self, i):
+
+        group = self.hdf5_repo[str(i)]
+        num_Yh = len(group) - 1
+        Yh = [np.array(group['Yh_' + str(j)]) 
+              for j in range(num_Yh)]
+        Yl = np.array(group['Yl'])
+
+        return (Yh, Yl)
 
     def cols(self):
 
