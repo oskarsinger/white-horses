@@ -35,7 +35,7 @@ class FixedRateLoader:
         self.start_times = [self._get_datetime_from_key(k)
                             for k in sorted(repo.keys())]
         self.num_sessions = len(self.start_times)
-        dataset = repo.values()[0][self.sensor]
+        dataset = list(repo.values())[0][self.sensor]
         key = [k for k in dataset.attrs.keys() if 'hz' in k][0]
         self.original_hertz = dataset.attrs[key]
 

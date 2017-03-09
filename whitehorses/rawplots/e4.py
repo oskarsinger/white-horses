@@ -73,7 +73,7 @@ class E4RawDataPlotRunner:
             self.servers = {s : [I1DM(ds) for ds in dss]
                             for (s, dss) in self.servers.items()}
 
-        sample_dls = self.loaders.values()[0]
+        sample_dls = list(self.loaders.values())[0]
 
         self.num_views = len(sample_dls)
         self.rates = [dl.get_status()['hertz']

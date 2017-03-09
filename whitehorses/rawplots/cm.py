@@ -65,7 +65,7 @@ class CMRawDataPlotRunner:
             self.filepath)
         self.subjects = self.loaders.keys()
 
-        sample_dls = self.loaders.values()[0]
+        sample_dls = list(self.loaders.values())[0]
 
         self.num_views = len(sample_dls)
         self.names = [dl.name()
