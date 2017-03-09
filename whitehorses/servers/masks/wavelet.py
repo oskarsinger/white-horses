@@ -90,13 +90,11 @@ class DTCWTMask:
 
         if self.serve_one_period:
             new_w = self._get_one_period(self.num_rounds)
-            
-            self.num_rounds += 1
 
             if self.overlap:
                 if self.num_rounds == 1:
                     wavelets = new_w[:self.w_window,:]
-                elif self.num_rounds < self.num_batches - 1:
+                elif self.num_rounds < self.num_batches:
                     w1 = self.current_w[self.w_window:,:]
                     w2 = new_w[:self.w_window,:]
                     wavelets = w1 + w2 / 2
@@ -148,6 +146,8 @@ class DTCWTMask:
 
         if self.magnitude:
             wavelets = np.absolute(wavelets)
+            
+        self.num_rounds += 1
 
         return wavelets
 
