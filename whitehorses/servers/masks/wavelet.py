@@ -179,8 +179,9 @@ class DTCWTMask:
         for (j, freq) in enumerate(Yh):
             group.create_dataset(
                 'Yh_' + str(j), data=freq)
-            group.create_dataset(
-                'Yl', data=freq)
+
+        group.create_dataset(
+            'Yl', data=freq)
 
     def _load_wavelets(self, i):
 
