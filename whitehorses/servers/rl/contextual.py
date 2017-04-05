@@ -1,6 +1,6 @@
 import numpy as np
 
-class BanditServer:
+class ContextualBanditServer:
 
     def __init__(self, loader):
 
@@ -8,10 +8,15 @@ class BanditServer:
 
         self.num_rounds = 0
 
+    def get_data(self):
+
+        self.num_rounds += 1
+
+        return self.loader.get_data()
+
     def set_action(self, action):
 
         self.loader.set_action(action)
-        self.num_rounds += 1
 
     def get_reward(self):
 
