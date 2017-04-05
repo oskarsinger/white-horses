@@ -7,12 +7,10 @@ class LinearRegressionGaussianLoader:
     def __init__(self,
         inner_loader,
         w=None,
-        noise=None,
         noisy=False,
         bias=False):
 
         self.loader = inner_loader
-        self.noise = noise
         self.noisy = noisy
         self.bias = bias
 
@@ -29,7 +27,6 @@ class LinearRegressionGaussianLoader:
 
         self.w = w
         self.y = np.dot(self.X, self.w)
-        self.noise = None
 
         if self.noise is not None:
             self.y += self.noise
