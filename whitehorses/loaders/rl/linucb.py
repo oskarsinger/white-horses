@@ -26,7 +26,7 @@ class LinUCBGaussianLoader:
 
     def get_data(self):
 
-        self.current_x = self.loader.get_data()
+        self.current_x = self.loader.get_data().T
         self.num_rounds += 1
 
         return np.copy(self.current_x)
@@ -40,7 +40,7 @@ class LinUCBGaussianLoader:
         x = np.vstack([
             self.current_x,
             self.actions[-1]])
-        r = np.dot(self.w, x)
+        r = np.dot(self.w.T, x)[0,0]
 
         if self.noisy:
             r += np.random.randn()
