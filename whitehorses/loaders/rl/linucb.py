@@ -20,32 +20,32 @@ class LinUCBGaussianLoader:
             w = np.random.randn(self.zd + self.ad, 1)
 
         self.w = w
-        self.actions = []
-        self.rewards = []
+        self.a_history = []
+        self.r_history = []
         self.num_rounds = 0
 
     def get_data(self):
 
-        self.current_x = self.loader.get_data().T
         self.num_rounds += 1
+        self.current_x = self.loader.get_data().T
 
         return np.copy(self.current_x)
 
     def set_action(self, a):
 
-        self.actions.append(a)
+        self.a_history.append(a)
 
     def get_reward(self):
 
         x = np.vstack([
             self.current_x,
-            self.actions[-1]])
+            self.a_history[-1]])
         r = np.dot(self.w.T, x)[0,0]
 
         if self.noisy:
             r += np.random.randn()
 
-        self.rewards.append(r)
+        self.r_history.append(r)
 
         return r
 
