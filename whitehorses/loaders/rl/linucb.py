@@ -40,7 +40,7 @@ class LinUCBGaussianLoader:
         x = np.vstack([
             self.current_x,
             self.a_history[-1]])
-        r = np.dot(self.w.T, x)[0,0]
+        r = np.dot(self.w.T, x)[0]
 
         if self.noisy:
             r += np.random.randn()
