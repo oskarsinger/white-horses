@@ -11,7 +11,7 @@ class ConstantLoader:
 
         self.num_rounds += 1
 
-        return c
+        return self.c
 
     def name(self):
 
