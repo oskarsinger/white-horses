@@ -68,7 +68,9 @@ class SyntheticHeartStepsLoader:
         self.current_state = np.vstack([
             pre_steps, 
             engaged_level, 
-            self.baseline])
+            self.baseline,
+            pre_steps * self.baseline,
+            engaged_level * self.baseline])
 
         return self.current_state
 
@@ -79,11 +81,7 @@ class SyntheticHeartStepsLoader:
         self.current_covariates = np.vstack([
             1,
             self.current_state,
-            action * self.current_state,
-            self.current_state[0] * self.baseline,
-            self.current_state[1] * self.baseline,
-            self.current_state[0] * self.baseline * action,
-            self.current_state[1] * self.baseline * action])
+            action])
 
     def get_reward(self):
 
