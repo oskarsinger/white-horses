@@ -22,6 +22,10 @@ class ContextualBanditServer:
 
         return self.loader.get_reward()
 
+    def get_max_reward(self, actions):
+
+        return self.loader.get_max_reward(actions)
+
     def cols(self):
 
         return self.loader.cols()

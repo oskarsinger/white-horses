@@ -15,9 +15,11 @@ class LinUCBGaussianLoader:
         self.bias = bias
 
         self.zd = self.loader.cols()
+        self.ctd = self.ad * self.zd
+        self.p = self.ad + self.zd + self.ctd
         
         if w is None:
-            w = np.random.randn(self.zd + self.ad, 1)
+            w = np.random.randn(self.p, 1)
 
         self.w = w
         self.a_history = []
@@ -27,9 +29,9 @@ class LinUCBGaussianLoader:
     def get_data(self):
 
         self.num_rounds += 1
-        self.current_x = self.loader.get_data().T
+        self.current_z = self.loader.get_data().T
 
-        return np.copy(self.current_x)
+        return np.copy(self.current_z)
 
     def set_action(self, a):
 
@@ -38,7 +40,7 @@ class LinUCBGaussianLoader:
     def get_reward(self):
 
         x = np.vstack([
-            self.current_x,
+            self.current_z,
             self.a_history[-1]])
         r = np.dot(self.w.T, x)[0]
 
@@ -48,6 +50,14 @@ class LinUCBGaussianLoader:
         self.r_history.append(r)
 
         return r
+
+    def get_max_reward(self, actions):
+
+        xs = [np.vstack([self.current_z, a])
+              for a in actions)]
+
+        return max(
+            [np.dot(self.w.T, x)[0] for x in xs])
 
     def name(self):
 
