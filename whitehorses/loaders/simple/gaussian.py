@@ -11,7 +11,8 @@ class GaussianLoader:
         lazy=True,
         batch_size=None, 
         k=None, 
-        mean=None):
+        mean=None,
+        unit_norm=False):
 
         # Check validity of k parameter
         if k is None:
@@ -35,6 +36,7 @@ class GaussianLoader:
         self.p = p
         self.k = k
         self.lazy = lazy
+        self.unit_norm = unit_norm
 
         # Set mean of each column by input constants
         if mean is not None:
@@ -48,7 +50,12 @@ class GaussianLoader:
         self.X = None
         
         if not self.lazy:
-            self.X = _get_batch(self.n, self.p, self.k, self.mean)
+            self.X = _get_batch(
+                self.n, 
+                self.p, 
+                self.k, 
+                self.mean, 
+                unit_norm=self.unit_norm)
             
         # Checklist for which rows sampled in current epoch
         self.sampled = get_checklist(range(self.n))
@@ -62,7 +69,12 @@ class GaussianLoader:
     def get_data(self):
 
         if self.X is None:
-            self.X = _get_batch(self.n, self.p, self.k, self.mean)
+            self.X = _get_batch(
+                self.n, 
+                self.p, 
+                self.k, 
+                self.mean,
+                unit_norm=self.unit_norm)
 
         self.num_rounds += 1
 
@@ -146,7 +158,8 @@ class ShiftingMeanGaussianLoader:
         max_rounds=1000,
         batch_size=1, 
         k=None, 
-        variance=None):
+        variance=None,
+        unit_norm=False):
 
         # Check validity of k parameter
         if k is None:
@@ -162,6 +175,7 @@ class ShiftingMeanGaussianLoader:
         self.k = k
         self.max_rounds = max_rounds
         self.bs = batch_size
+        self.unit_norm = unit_norm
 
         # Figure out clean way to verify dimensional validity
         self.rate = rate
@@ -188,7 +202,12 @@ class ShiftingMeanGaussianLoader:
         current_mean = np.dot(self.mean, scale)
 
         # Get batch
-        batch = _get_batch(self.bs, self.p, self.k, current_mean)
+        batch = _get_batch(
+            self.bs, 
+            self.p, 
+            self.k, 
+            current_mean,
+            unit_norm=self.unit_norm)
 
         # Update global state variable
         self.num_rounds += 1
@@ -225,7 +244,7 @@ class ShiftingMeanGaussianLoader:
 
         return self.num_rounds
 
-def _get_batch(bs, p, k=None, mean=None):
+def _get_batch(bs, p, k=None, mean=None, unit_norm=True):
 
     batch = None
 
@@ -233,6 +252,8 @@ def _get_batch(bs, p, k=None, mean=None):
         batch = get_rank_k(bs, p, k)
     else:
         batch = np.random.randn(bs, p)
+
+    batch = batch / np.linalg.norm(batch, axis=1)[:,np.newaxis]
 
     if mean is not None:
         batch += mean

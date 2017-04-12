@@ -54,7 +54,7 @@ class LinUCBGaussianLoader:
     def get_max_reward(self, actions):
 
         xs = [np.vstack([self.current_z, a])
-              for a in actions)]
+              for a in actions]
 
         return max(
             [np.dot(self.w.T, x)[0] for x in xs])
