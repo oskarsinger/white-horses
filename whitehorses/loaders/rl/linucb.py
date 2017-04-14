@@ -6,12 +6,13 @@ class LinUCBGaussianLoader:
         inner_loader,
         ad,
         w=None,
-        noisy=False,
+        noise_variance=None,
         bias=False):
 
         self.loader = inner_loader
         self.ad = ad
-        self.noisy = noisy 
+        self.noise_variance = noise_variance
+        self.noisy = noise_variance is not None
         self.bias = bias
 
         self.zd = self.loader.cols()
@@ -45,7 +46,8 @@ class LinUCBGaussianLoader:
         r = np.dot(self.w.T, x)[0]
 
         if self.noisy:
-            r += np.random.randn()
+            r += np.random.normal(
+                scale=self.noise_variance)
 
         self.r_history.append(r)
 
