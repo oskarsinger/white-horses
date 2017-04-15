@@ -32,6 +32,10 @@ class LinUCBGaussianLoader:
         self.num_rounds += 1
         self.current_z = self.loader.get_data().T
 
+        if self.noisy:
+            self.current_noise = np.random.normal(
+                scale=self.noise_variance)
+
         return np.copy(self.current_z)
 
     def set_action(self, a):
@@ -46,11 +50,10 @@ class LinUCBGaussianLoader:
         r = np.dot(self.w.T, x)[0]
 
         if self.noisy:
-            r += np.random.normal(
-                scale=self.noise_variance)
+            r += self.current_noise
 
-        if np.any(r < 0):
-            r = np.zeros_like(r)
+        #if np.any(r < 0):
+        #    r = np.zeros_like(r)
 
         self.r_history.append(r)
 
@@ -60,9 +63,14 @@ class LinUCBGaussianLoader:
 
         xs = [np.vstack([self.current_z, a])
               for a in actions]
+        rs = [np.dot(self.w.T, x)[0]
+              for x in xs]
 
-        return max(
-            [np.dot(self.w.T, x)[0] for x in xs])
+        if self.noisy:
+            rs = [r + self.current_noise
+                  for r in rs]
+
+        return max(rs)
 
     def name(self):
 
