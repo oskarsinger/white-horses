@@ -49,6 +49,9 @@ class LinUCBGaussianLoader:
             r += np.random.normal(
                 scale=self.noise_variance)
 
+        if np.any(r < 0):
+            r = np.zeros_like(r)
+
         self.r_history.append(r)
 
         return r
