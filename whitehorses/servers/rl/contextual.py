@@ -36,4 +36,4 @@ class ContextualBanditServer:
 
     def name(self):
 
-        return 'BanditServer'
+        return 'ContextualBanditServer'

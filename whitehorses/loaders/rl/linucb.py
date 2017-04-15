@@ -52,9 +52,6 @@ class LinUCBGaussianLoader:
         if self.noisy:
             r += self.current_noise
 
-        #if np.any(r < 0):
-        #    r = np.zeros_like(r)
-
         self.r_history.append(r)
 
         return r
