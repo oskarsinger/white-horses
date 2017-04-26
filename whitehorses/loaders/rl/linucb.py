@@ -5,6 +5,7 @@ class LinUCBGaussianLoader:
     def __init__(self,
         inner_loader,
         ad,
+        num_actions,
         w=None,
         noise_variance=None,
         bias=False):
@@ -13,16 +14,18 @@ class LinUCBGaussianLoader:
         self.ad = ad
         self.noise_variance = noise_variance
         self.noisy = noise_variance is not None
+        self.num_actions = num_actions
         self.bias = bias
 
         self.zd = self.loader.cols()
         self.ctd = self.ad * self.zd
         self.p = self.ad + self.zd + self.ctd
         
-        if w is None:
-            w = np.random.randn(self.p, 1)
+        if ws is None:
+            ws = [np.random.randn(self.p, 1)
+                  for i in range(self.num_actions)]
 
-        self.w = w
+        self.ws = ws
         self.a_history = []
         self.r_history = []
         self.num_rounds = 0
@@ -44,10 +47,11 @@ class LinUCBGaussianLoader:
 
     def get_reward(self):
 
+        (action, a_features) = self.a_history[-1]
         x = np.vstack([
             self.current_z,
-            self.a_history[-1]])
-        r = np.dot(self.w.T, x)[0]
+            a_features])
+        r = np.dot(self.ws[action].T, x)[0]
 
         if self.noisy:
             r += self.current_noise
@@ -58,10 +62,10 @@ class LinUCBGaussianLoader:
 
     def get_max_reward(self, actions):
 
-        xs = [np.vstack([self.current_z, a])
-              for a in actions]
-        rs = [np.dot(self.w.T, x)[0]
-              for x in xs]
+        xs = [np.vstack([self.current_z, f])
+              for (a, f) in a_features]
+        rs = [np.dot(w.T, x)[0]
+              for (x, w) in zip(xs, self.ws)]
 
         if self.noisy:
             rs = [r + self.current_noise
