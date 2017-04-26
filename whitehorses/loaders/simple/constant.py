@@ -15,7 +15,7 @@ class ConstantLoader:
     def get_data(self):
 
         self.num_rounds += 1
-
+        
         return self.c
 
     def name(self):
@@ -24,7 +24,7 @@ class ConstantLoader:
 
     def cols(self):
 
-        return 1
+        return self.c[0]
 
     def rows(self):
 
