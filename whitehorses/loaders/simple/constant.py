@@ -24,7 +24,7 @@ class ConstantLoader:
 
     def cols(self):
 
-        return self.c[0]
+        return self.c.shape[1]
 
     def rows(self):
 
