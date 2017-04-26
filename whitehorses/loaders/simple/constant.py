@@ -1,10 +1,15 @@
 import numpy as np
 
+from numbers import Number
+
 class ConstantLoader:
 
     def __init__(self, c):
 
-        self.c = np.array([c])[:,np.newaxis]
+        if isinstance(c, Number):
+            c = np.array([c])[:,np.newaxis]
+
+        self.c = c
         self.num_rounds = 0
 
     def get_data(self):
