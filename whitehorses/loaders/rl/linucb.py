@@ -66,6 +66,7 @@ class LinUCBGaussianLoader:
               for af in action_fs]
         rs = [np.dot(w.T, x)[0]
               for (x, w) in zip(xs, self.ws)]
+        #print('true rs', rs)
 
         if self.noisy:
             rs = [r + self.current_noise

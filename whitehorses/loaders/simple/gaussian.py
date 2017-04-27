@@ -84,7 +84,9 @@ class GaussianLoader:
             data = np.copy(self.X)
         else:
             # Check for the rows that have not been sampled this epoch
-            unsampled = [i for (i, s) in self.sampled.items() if not s]
+            unsampled = [i 
+                         for (i, s) in self.sampled.items() 
+                         if not s]
 
             # Refresh if unsampled will not fill a batch
             if len(unsampled) < self.batch_size:
@@ -252,8 +254,6 @@ def _get_batch(bs, p, k=None, mean=None, unit_norm=True):
         batch = get_rank_k(bs, p, k)
     else:
         batch = np.random.randn(bs, p)
-
-    batch = batch / np.linalg.norm(batch, axis=1)[:,np.newaxis]
 
     if mean is not None:
         batch += mean
