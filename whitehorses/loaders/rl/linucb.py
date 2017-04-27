@@ -6,7 +6,7 @@ class LinUCBGaussianLoader:
         inner_loader,
         ad,
         num_actions,
-        w=None,
+        ws=None,
         noise_variance=None,
         bias=False):
 
@@ -47,10 +47,10 @@ class LinUCBGaussianLoader:
 
     def get_reward(self):
 
-        (action, a_features) = self.a_history[-1]
+        (action, action_fs) = self.a_history[-1]
         x = np.vstack([
             self.current_z,
-            a_features])
+            action_fs])
         r = np.dot(self.ws[action].T, x)[0]
 
         if self.noisy:
@@ -60,10 +60,10 @@ class LinUCBGaussianLoader:
 
         return r
 
-    def get_max_reward(self, actions):
+    def get_max_reward(self, action_fs):
 
-        xs = [np.vstack([self.current_z, f])
-              for (a, f) in a_features]
+        xs = [np.vstack([self.current_z, af])
+              for af in action_fs]
         rs = [np.dot(w.T, x)[0]
               for (x, w) in zip(xs, self.ws)]
 
