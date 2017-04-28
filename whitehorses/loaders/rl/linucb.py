@@ -7,15 +7,13 @@ class LinUCBGaussianLoader:
         ad,
         num_actions,
         ws=None,
-        noise_variance=None,
-        bias=False):
+        noise_variance=None):
 
         self.loader = inner_loader
         self.ad = ad
         self.noise_variance = noise_variance
         self.noisy = noise_variance is not None
         self.num_actions = num_actions
-        self.bias = bias
 
         self.zd = self.loader.cols()
         self.ctd = self.ad * self.zd
