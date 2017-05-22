@@ -5,23 +5,18 @@ from .utils import get_gram as gg
 
 class SumGramServer:
 
-    def __init__(self, reg=0.1):
+    def __init__(self, d, reg=0.1):
 
+        self.d = d
         self.reg = reg
 
-        self.gram = None
+        self.gram = np.identity(self.d) * self.reg
         self.num_rounds = 0
         self.num_examples = 0
 
     def get_gram(self, batch):
 
-        update = gg(batch, reg=self.reg)
-
-        if self.gram is None:
-            self.gram = np.copy(update)
-        else:
-            self.gram += update
-
+        self.gram += np.dot(batch.T, batch)
         self.num_examples += batch.shape[0]
         self.num_rounds += 1
 
@@ -37,23 +32,22 @@ class SumGramServer:
 
 class BoxcarGramServer:
 
-    def __init__(self, window=1, reg=0.1):
+    def __init__(self, d, window=1, reg=0.1):
 
+        self.d = d
         self.window = window
         self.reg = reg
 
         self.q = FLQ(self.window)
-        self.gram = None
+        self.gram = np.identity(self.d) * self.reg
         self.num_rounds = 0
         self.num_examples = 0
 
     def get_gram(self, batch):
 
-        update = gg(batch, reg=self.reg)
+        update = np.dot(batch.T, batch)
 
-        if self.gram is None:
-            self.gram = np.copy(update)
-        elif self.q.is_full():
+        if self.q.is_full():
             self.gram += update
             self.gram -= self.q.get_items()[0]
         else:
