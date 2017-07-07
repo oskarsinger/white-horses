@@ -2,14 +2,16 @@ import numpy as np
 
 from linal.svd_funcs import get_svd_power
 
+# TODO: make a class for generating the below thing consistently
+# TODO: make some util functions for generating special cases
 # TODO: cite the Francis Bach paper
 class CCAProbabilisticModelLoader:
 
-    def __init__(self, num_data, W, Phi, mu, z, lazy=True):
+    def __init__(self, num_data, W, Psi, mu, z, lazy=True):
         
         self.num_data = num_data
         self.W = W
-        self.Phi = Phi
+        self.Psi = Psi
         self.mu = mu
         self.z = z
         self.lazy = lazy
@@ -17,7 +19,7 @@ class CCAProbabilisticModelLoader:
         self.d = self.W.shape[0]
         self.k = self.z.shape[0]
         self.mean = np.dot(self.W, z) + self.mu
-        self.sd = get_svd_power(self.Phi, 0.5)
+        self.sd = get_svd_power(self.Psi, 0.5)
         self.data = None
 
         if not self.lazy:
