@@ -6,5 +6,6 @@ from . import rl
 from . import supervised
 from . import simple
 from . import mixture
+from . import multiview
 
 from . import shortcuts
