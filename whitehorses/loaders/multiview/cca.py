@@ -10,7 +10,7 @@ def get_Fu2016_Data():
 
 def get_easy_CCAPMLs(num_data, k, ds, lazy=True):
 
-    z = np.random.randn(k, 1)
+    z = np.random.randn(k, num_data)
     Psi_inits = [np.random.randn(d * 2, d)
                  for d in ds]
     Psis = [np.dot(Pi.T, Pi) for Pi in Psi_inits]
@@ -43,15 +43,19 @@ class CCAProbabilisticModelLoader:
         self.data = None
 
         if not self.lazy:
-            self.data = None
+            self._set_data()
 
     def get_data(self):
 
         if self.data is None:
-            init = np.random.randn(
-                self.num_data, self.d)
-            shifted = init + self.mean
-            
-            self.data = np.dot(shifted, self.sd)
+            self._set_data()
 
         return self.data
+
+    def _generate_data(self):
+
+        init = np.random.randn(
+            self.num_data, self.d)
+        shifted = init + self.mean.T
+
+        self.data = np.dot(shifted, self.sd)
