@@ -25,7 +25,12 @@ def get_easy_CCAPMLs(num_data, k, ds, lazy=True):
     return [CCAPML(num_data, W, Psi, mu, z, lazy=lazy)
             for (W, Psi, mu) in zipped]
 
-class CCAProbabilisticModelLoader:
+class LambdaWeightedCCAProbabilisticModelLoader:
+
+    def __init__(self, num_data, W, Psi, mu, z, lazy=True):
+        pass
+
+class StaticCCAProbabilisticModelLoader:
 
     def __init__(self, num_data, W, Psi, mu, z, lazy=True):
         
@@ -52,7 +57,7 @@ class CCAProbabilisticModelLoader:
 
         return self.data
 
-    def _generate_data(self):
+    def _set_data(self):
 
         init = np.random.randn(
             self.num_data, self.d)

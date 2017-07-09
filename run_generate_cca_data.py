@@ -18,6 +18,7 @@ def run_things_all_day_bb(
     ds,
     lazy):
 
+    ds = [int(d) for d in ds.split()]
     loaders = get_easy_CCAPMLs(num_data, k, ds, lazy=lazy) 
     names = ['N', 'k', 'ds']
     vals = [
@@ -25,7 +26,7 @@ def run_things_all_day_bb(
         str(k),
         '-'.join([str(d) for d in ds])]
     filename = get_ts('easy_cca' + '_' + '_'.join(
-        [n + '-' + v for (n, v) in zip(names, values)]) \
+        [n + '-' + v for (n, v) in zip(names, vals)])) \
         + '.hdf5'
     filepath = os.path.join(data_dir, filename)
     hdf5_repo = h5py.File(filepath, 'w')
