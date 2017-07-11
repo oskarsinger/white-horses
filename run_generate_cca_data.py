@@ -19,7 +19,7 @@ def run_things_all_day_bb(
     lazy):
 
     ds = [int(d) for d in ds.split()]
-    loaders = get_easy_CCAPMLs(num_data, k, ds, lazy=lazy) 
+    loaders = get_easy_SCCAPMLs(num_data, k, ds, lazy=lazy) 
     names = ['N', 'k', 'ds']
     vals = [
         str(num_data), 

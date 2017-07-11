@@ -13,7 +13,7 @@ def get_Fu2016_data(num_data, k, ds, lazy=True, density=0.1):
     return [Fu2016Loader(Z, d, lazy=lazy, density=density)
             for d in ds]
 
-def get_easy_CCAPMLs(num_data, k, ds, lazy=True):
+def get_easy_SCCAPMLs(num_data, k, ds, lazy=True):
 
     Z = np.random.randn(k, num_data)
     Psi_inits = [np.random.randn(d * 2, d)
@@ -25,9 +25,9 @@ def get_easy_CCAPMLs(num_data, k, ds, lazy=True):
         Ws,
         Psis,
         mus)
-    CCAPML = CCAProbabilisticModelLoader
+    SCCAPML = StaticCCAProbabilisticModelLoader
     
-    return [CCAPML(W, Psi, mu, Z, lazy=lazy)
+    return [SCCAPML(W, Psi, mu, Z, lazy=lazy)
             for (W, Psi, mu) in zipped]
 
 class Fu2016Loader:
