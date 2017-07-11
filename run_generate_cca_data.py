@@ -2,6 +2,8 @@ import click
 import os
 import h5py
 
+import numpy as np
+
 from whitehorses.loaders.multiview.cca import get_easy_SCCAPMLs
 from drrobert.file_io import get_timestamped as get_ts
 
@@ -25,15 +27,17 @@ def run_things_all_day_bb(
         str(num_data), 
         str(k),
         '-'.join([str(d) for d in ds])]
-    filename = get_ts('easy_cca' + '_' + '_'.join(
-        [n + '-' + v for (n, v) in zip(names, vals)])) \
-        + '.hdf5'
-    filepath = os.path.join(data_dir, filename)
-    hdf5_repo = h5py.File(filepath, 'w')
+    dirname = get_ts('easy_cca' + '_' + '_'.join(
+        [n + '-' + v for (n, v) in zip(names, vals)]))
+    dirpath = os.path.join(data_dir, dirname)
+
+    os.mkdir(dirpath)
     
     for (i, l) in enumerate(loaders):
-        hdf5_repo.create_dataset(
-            str(i), data=l.get_data())
+        filename = 'view_' + str(i) + '.csv'
+        filepath = os.path.join(dirpath, filename)
+
+        np.savetxt(filepath, l.get_data(), delimiter=',')
 
 if __name__=='__main__':
     run_things_all_day_bb()
