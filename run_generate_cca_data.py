@@ -2,7 +2,7 @@ import click
 import os
 import h5py
 
-from whitehorses.loaders.multiview.cca import get_easy_CCAPMLs
+from whitehorses.loaders.multiview.cca import get_easy_SCCAPMLs
 from drrobert.file_io import get_timestamped as get_ts
 
 @click.command()
