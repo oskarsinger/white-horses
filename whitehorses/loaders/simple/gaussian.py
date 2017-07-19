@@ -1,6 +1,6 @@
 import numpy as np
 
-from linal.svd_funcs import get_svd_power
+from linal.svd import get_svd_power
 from linal.random.utils import get_rank_k
 from drrobert.misc import get_checklist
 

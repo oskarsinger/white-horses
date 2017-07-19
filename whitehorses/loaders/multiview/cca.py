@@ -1,6 +1,6 @@
 import numpy as np
 
-from linal.svd_funcs import get_svd_power
+from linal.svd import get_svd_power
 from linal.random import get_sparse_normal
 
 # TODO: make some util functions for generating special cases
