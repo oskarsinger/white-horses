@@ -13,5 +13,4 @@ class Batch2Queue:
         self.data = self.dl.get_data()
 
     def get_data(self):
-
-
+        pass
