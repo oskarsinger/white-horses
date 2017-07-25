@@ -58,6 +58,11 @@ class Fu2016Loader:
 
             self.data = np.dot(A, self.Z).T
 
+class EventCCAProbabilisticModelLoader:
+
+    def __init__(self, W, Psi, mu, Z, fakes, lazy=True):
+        pass
+
 class StaticCCAProbabilisticModelLoader:
 
     def __init__(self, W, Psi, mu, Z, lazy=True):
