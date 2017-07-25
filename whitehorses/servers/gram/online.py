@@ -3,9 +3,15 @@ import numpy as np
 from drrobert.data_structures import FixedLengthQueue as FLQ
 from .utils import get_gram as gg
 
+# TODO: play around with the idea Joel had about spectral reg
+class AdaptiveRegGramServer:
+
+    def __init__(self):
+        pass
+
 class SumGramServer:
 
-    def __init__(self, d, reg=0.1):
+    def __init__(self, d, reg=10**(-5)):
 
         self.d = d
         self.reg = reg
@@ -32,7 +38,7 @@ class SumGramServer:
 
 class BoxcarGramServer:
 
-    def __init__(self, d, window=1, reg=0.1):
+    def __init__(self, d, window=1, reg=10**(-5)):
 
         self.d = d
         self.window = window
@@ -73,7 +79,7 @@ class BoxcarGramServer:
 
 class ExpGramServer:
 
-    def __init__(self, weight=0.9, reg=0.1):
+    def __init__(self, weight=0.9, reg=10**(-5)):
 
         self.weight = weight
         self.reg = reg

@@ -4,16 +4,15 @@ import numpy as np
 
 class BatchGramServer:
 
-    def __init__(self, reg=0.1):
+    def __init__(self, reg=10**(-5)):
+        
         self.reg = reg
 
     def get_gram(self, batch):
 
-        n = batch.shape[0]
+        gram = np.dot(batch.T, batch)
 
-        return gg(batch, reg=self.reg) / n
+        gram += np.eye(batch.shape[1]) * self.reg
 
-    def get_status(self):
+        return gram
 
-        return {
-            'reg': self.reg}
