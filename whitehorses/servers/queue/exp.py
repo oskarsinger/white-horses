@@ -35,6 +35,8 @@ class ExponentialDownWeightedQueue:
                     self.batch[1:,:],
                     new_data])
 
+        self.num_rounds += 1
+
     def get_batch(self):
 
         return get_zm_uv(self.batch)

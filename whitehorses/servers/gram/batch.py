@@ -1,5 +1,3 @@
-from .utils import get_gram as gg
-
 import numpy as np
 
 class BatchGramServer:
