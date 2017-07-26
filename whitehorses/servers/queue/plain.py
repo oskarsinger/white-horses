@@ -1,5 +1,7 @@
 import numpy as np
 
+from drrobert.stats import get_zm_uv
+
 class PlainQueue:
 
     def __init__(self, batch_size):
@@ -25,4 +27,4 @@ class PlainQueue:
 
     def get_batch(self):
 
-        return self.batch
+        return get_zm_uv(self.batch)
