@@ -4,7 +4,7 @@ import os
 import numpy as np
 import drrobert.network as drn
 
-from .simple import CosineLoader as CL
+from .simple import EmbeddedCosineLoader as ECL
 from .simple import FakePeriodicGaussianLoader as FPGL
 from .simple import GaussianLoader as GL
 from .simple import BatchPhysiologicalTimeSeriesLoader as BPTSL
@@ -299,11 +299,11 @@ def get_cosine_loaders(
         phases,
         indexes)
 
-    return [_get_CL(p, n, per, a, ph, i,
+    return [_get_ECL(p, n, per, a, ph, i,
                 period_noise, phase_noise, amplitude_noise)
             for (p, per, a, ph, i) in loader_info]
 
-def _get_CL(
+def _get_ECL(
     p,
     max_rounds,
     period,
@@ -314,7 +314,7 @@ def _get_CL(
     phase_noise,
     amplitude_noise):
 
-    return CL(
+    return ECL(
         p,
         max_rounds=max_rounds,
         period=period,

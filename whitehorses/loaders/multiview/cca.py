@@ -2,7 +2,7 @@ import numpy as np
 
 from linal.svd import get_svd_power
 from linal.random import get_sparse_normal
-from whitehorses import EmbeddedCosineLoader as ECL
+from whitehorses.loaders.simple import EmbeddedCosineLoader as ECL
 
 # TODO: cite the Francis Bach and Fu 2016 papers
 

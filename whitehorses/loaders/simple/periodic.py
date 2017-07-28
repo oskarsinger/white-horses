@@ -78,19 +78,23 @@ class EmbeddedCosineLoader:
         self.amplitude_noise = amplitude_noise
 
         self.num_rounds = 0
+        self.data = None
 
     def get_data(self):
 
-        data = np.random.randn(n, p)
-        x = np.arange(n)[:,np.newaxis]
-        with_period = x * 2 * np.pi / self.period
-        with_phase = with_period + self.phase 
-        wave = np.cos(with_phase)
-        with_amp = self.amplitude * wave 
-        with_vshift = with_amp
-        data[:,self.index] += with_vshift
+        if self.data is None:
+            self.data = np.random.randn(self.n, self.p)
 
-        return data
+            x = np.arange(self.n)
+            with_period = x * 2 * np.pi / self.period
+            with_phase = with_period + self.phase 
+            wave = np.cos(with_phase)
+            with_amp = self.amplitude * wave 
+            with_vshift = with_amp + self.vertical_shift
+            
+            self.data[:,self.index] += with_vshift
+
+        return self.data
 
     def name(self):
 
