@@ -2,9 +2,39 @@ import numpy as np
 
 from linal.svd import get_svd_power
 from linal.random import get_sparse_normal
+from whitehorses import EmbeddedCosineLoader as ECL
 
-# TODO: make some util functions for generating special cases
 # TODO: cite the Francis Bach and Fu 2016 papers
+
+def get_cosine_SCCAPMLs(
+    num_data, 
+    k, 
+    ds, 
+    amp=1, 
+    period=2*np.pi,
+    phase=0,
+    v_shift=0,
+    lazy=True):
+
+    Z = ECL(
+        num_data,
+        k,
+        phase=phase,
+        amplitude=amp,
+        period=period).get_data().T
+    Psi_inits = [np.random.randn(d * 2, d)
+                 for d in ds]
+    Psis = [np.dot(Pi.T, Pi) for Pi in Psi_inits]
+    Ws = [np.random.randn(d, k) for d in ds]
+    mus = [np.random.randn(d, 1) for d in ds]
+    zipped = zip(
+        Ws,
+        Psis,
+        mus)
+    SCCAPML = StaticCCAProbabilisticModelLoader
+
+    return [SCCAPML(W, Psi, mu, Z, lazy=lazy)
+            for (W, Psi, mu) in zipped]
 
 def get_Fu2016_data(num_data, k, ds, lazy=True, density=0.1):
 
@@ -57,11 +87,6 @@ class Fu2016Loader:
             A = get_sparse_normal(d, k, density=density)
 
             self.data = np.dot(A, self.Z).T
-
-class EventCCAProbabilisticModelLoader:
-
-    def __init__(self, W, Psi, mu, Z, fakes, lazy=True):
-        pass
 
 class StaticCCAProbabilisticModelLoader:
 

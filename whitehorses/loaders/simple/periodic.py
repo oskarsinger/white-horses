@@ -52,24 +52,26 @@ class FakePeriodicGaussianLoader:
         
         return self.loader.rows()
 
-class CosineLoader:
+class EmbeddedCosineLoader:
 
     def __init__(self,
+        n,
         p,
-        max_rounds=1000,
         phase=0,
         amplitude=1.0,
         period=2*np.pi,
+        vertical_shift=0,
         index=0,
         period_noise=False,
         phase_noise=False,
         amplitude_noise=False):
 
+        self.n = n
         self.p = p
-        self.max_rounds = max_rounds
         self.phase = phase
         self.amplitude = amplitude
         self.period = period
+        self.vertical_shift = vertical_shift
         self.index = index
         self.period_noise = period_noise
         self.phase_noise = phase_noise
@@ -79,40 +81,20 @@ class CosineLoader:
 
     def get_data(self):
 
-        period = self.period
-        phase = self.phase
-        amplitude = self.amplitude
+        data = np.random.randn(n, p)
+        x = np.arange(n)[:,np.newaxis]
+        with_period = x * 2 * np.pi / self.period
+        with_phase = with_period + self.phase 
+        wave = np.cos(with_phase)
+        with_amp = self.amplitude * wave 
+        with_vshift = with_amp
+        data[:,self.index] += with_vshift
 
-        if self.period_noise:
-            period += np.random.randn(1)[0]
-
-        if self.phase_noise:
-            phase += np.random.randn(1)[0]
-
-        if self.amplitude_noise:
-            amplitude += np.random.randn(1)[0]
-
-        inside = self.num_rounds / period - phase
-        unscaled = np.cos(inside)
-        scaled = amplitude * unscaled
-        noise = np.random.randn(1, self.p)
-
-        noise[0,self.index] = scaled
-        self.num_rounds += 1
-
-        return noise
-
-    def finished(self):
-
-        return self.num_rounds >= self.max_rounds
-
-    def refresh(self):
-
-        self.num_rounds = 0
+        return data
 
     def name(self):
 
-        return 'CosineLoader'
+        return 'EmbeddedCosineLoader'
 
     def cols(self):
 
