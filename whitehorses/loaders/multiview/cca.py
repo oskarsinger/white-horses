@@ -118,6 +118,6 @@ class StaticCCAProbabilisticModelLoader:
 
         init = np.random.randn(
             self.num_data, self.d)
-        shifted = init + self.mean.T
-
-        self.data = np.dot(shifted, self.sd)
+        scaled = np.dot(init, self.sd)
+        
+        self.data = scaled + self.mean.T
