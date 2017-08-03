@@ -5,15 +5,43 @@ from linal.random import get_sparse_normal
 from whitehorses.loaders.simple import EmbeddedCosineLoader as ECL
 
 # TODO: cite the Francis Bach and Fu 2016 papers
-def get_dynamic_SCCAPMLs(
+def get_lds_SCCAPMLs(
     num_data,
-    k,
     ds,
     dynamics,
     seed=None,
     lazy=True):
 
-    pass
+    k = dynamics.shape[0]
+
+    if seed is None:
+        seed = np.ones((k, 1))
+
+    timeline = [seed]
+
+    for t in range(num_data-1):
+        previous_state = timeline[-1]
+        new_state = np.dot(
+            dynamics, previous_data)
+
+        timeline.append(new_state)
+
+    noiseless_Z = np.array(timeline).T
+    noise = np.random.randn(num_data, k)
+    Z = noiseless_Z + noise
+    Psi_inits = [np.random.randn(d * 2, d)
+                 for d in ds]
+    Psis = [np.dot(Pi.T, Pi) for Pi in Psi_inits]
+    Ws = [np.random.randn(d, k) for d in ds]
+    mus = [np.random.randn(d, 1) for d in ds]
+    zipped = zip(
+        Ws,
+        Psis,
+        mus)
+    SCCAPML = StaticCCAProbabilisticModelLoader
+
+    return [SCCAPML(W, Psi, mu, Z, lazy=lazy)
+            for (W, Psi, mu) in zipped]
 
 def get_cosine_SCCAPMLs(
     num_data, 
