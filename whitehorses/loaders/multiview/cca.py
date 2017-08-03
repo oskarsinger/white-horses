@@ -5,6 +5,15 @@ from linal.random import get_sparse_normal
 from whitehorses.loaders.simple import EmbeddedCosineLoader as ECL
 
 # TODO: cite the Francis Bach and Fu 2016 papers
+def get_dynamic_SCCAPMLs(
+    num_data,
+    k,
+    ds,
+    dynamics,
+    seed=None,
+    lazy=True):
+
+    pass
 
 def get_cosine_SCCAPMLs(
     num_data, 
