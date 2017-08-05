@@ -9,10 +9,8 @@ class Batch2Minibatch:
         batch_size, 
         data_loader=None,
         data_server=None,
-        center=False,
         random=True, 
-        lazy=True,
-        n_components=None):
+        lazy=True):
 
         if data_loader is None:
             data_loader = data_server.get_status()['data_loader']
@@ -23,10 +21,8 @@ class Batch2Minibatch:
         self.ds = data_server
         self.dl = data_loader
         self.bs = batch_size
-        self.center = center
         self.random = random
         self.lazy = lazy
-        self.n_components = n_components
 
         self.data = None if self.lazy else self._init_data()
         self.num_rounds = 0
@@ -35,9 +31,6 @@ class Batch2Minibatch:
 
         if self.data is None:
             self._init_data()
-
-            if self.center:
-                self.data -= np.mean(self.data, axis=0)
 
         current = None
 
@@ -55,9 +48,6 @@ class Batch2Minibatch:
             current = np.copy(self.data[begin:end,:])
 
         self.num_rounds += 1
-
-        if self.n_components is not None:
-            current = get_pca(current, n_components=self.n_components)
 
         return current
 
@@ -97,7 +87,6 @@ class Batch2Minibatch:
             'data_server': self.ds,
             'data_loader': self.dl,
             'batch_size': self.bs,
-            'n_components': self.n_components,
             'data': self.data,
             'num_rounds': self.num_rounds,
             'random': self.random,
