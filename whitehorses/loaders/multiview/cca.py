@@ -3,18 +3,18 @@ import numpy as np
 from linal.svd import get_svd_power
 from linal.random import get_sparse_normal
 from whitehorses.loaders.simple import EmbeddedCosineLoader as ECL
+from whitehorses.loaders.dynamics import LinearDynamicsSequenceLoader as LDSL
 
 # TODO: cite the Francis Bach and Fu 2016 papers
 def get_lds_SCCAPMLs(
     num_data,
     ds,
     A,
-    B=None,
-    C=None,
-    D=None,
     seed=None,
     lazy=True):
 
+    loader = LDSL(A, num_data, seed=seed)
+    Z = loader.get_data().T
     Psi_inits = [np.random.randn(d * 2, d)
                  for d in ds]
     Psis = [np.dot(Pi.T, Pi) for Pi in Psi_inits]
