@@ -13,6 +13,7 @@ def get_lds_SCCAPMLs(
     seed=None,
     lazy=True):
 
+    k = A.shape[0]
     loader = LDSL(A, num_data, seed=seed)
     Z = loader.get_data().T
     Psi_inits = [np.random.randn(d * 2, d)

@@ -28,7 +28,7 @@ class LinearDynamicsSequenceLoader:
 
             y_list.append(new_y)
 
-        self.noiseless_Y = np.array(y_list[1:]).T
+        self.noiseless_Y = np.array(y_list[1:])[:,:,0]
 
     def _set_Y(self):
 

@@ -19,7 +19,9 @@ def run_things_all_day_bb(
     ds,
     lazy):
 
-    dynamics = None
+    pre_A = np.random.randn(2*k, k)
+    A = np.dot(pre_A.T, pre_A)
+    (_, dynamics) = np.linalg.eig(A)
     ds = [int(d) for d in ds.split()]
     loaders = get_lds_SCCAPMLs(
         num_data, 
