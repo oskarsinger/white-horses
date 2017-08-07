@@ -5,6 +5,7 @@ import numpy as np
 
 from whitehorses.loaders.multiview.cca import get_lds_SCCAPMLs
 from drrobert.file_io import get_timestamped as get_ts
+from linal.utils import get_quadratic
 
 @click.command()
 @click.option('--data-dir')
@@ -21,7 +22,9 @@ def run_things_all_day_bb(
 
     pre_A = np.random.randn(2*k, k)
     A = np.dot(pre_A.T, pre_A)
-    (_, dynamics) = np.linalg.eig(A)
+    (lam, Q) = np.linalg.eig(A)
+    lam /= np.max(lam)
+    dynamics = get_quadratic(Q, np.diag(lam))
     ds = [int(d) for d in ds.split()]
     loaders = get_lds_SCCAPMLs(
         num_data, 
