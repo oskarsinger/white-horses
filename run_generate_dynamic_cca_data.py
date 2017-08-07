@@ -34,9 +34,10 @@ def run_things_all_day_bb(
     dynamics = [get_quadratic(Q, np.diag(lam))
                 for (lam, Q) in lam_and_Q]
     loaders = get_easy_DCCAPMLs(
-        num_data, 
-        ds, 
         dynamics,
+        num_data, 
+        k,
+        ds, 
         lazy=lazy) 
     names = ['N', 'k', 'ds']
     vals = [

@@ -1,5 +1,7 @@
 import numpy as np
 
+from linal.svd import get_svd_power
+
 def get_easy_DCCAPMLs(dynamics, num_data, k, ds, lazy=True):
 
     Z = np.random.randn(k, num_data)
@@ -39,6 +41,7 @@ class DynamicCCAProbabilisticModelLoader:
         self.d = self.W.shape[0]
         (self.k, self.num_data) = self.Z.shape
         (self.lam, self.Q) = np.linalg.eig(dynamics)
+        self.lam = self.lam[:,np.newaxis]
 
         QW = np.dot(self.Q, self.W)
 
