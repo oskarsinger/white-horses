@@ -6,44 +6,48 @@ import numpy as np
 from whitehorses.loaders.multiview import get_easy_DCCAPMLs
 from drrobert.file_io import get_timestamped as get_ts
 from drrobert.misc import unzip
-from linal.utils import get_quadratic
+from linal.utils import get_quadratic, get_rotation
 
 @click.command()
 @click.option('--data-dir')
 @click.option('--num-data', default=1000)
-@click.option('--k', default=1)
+@click.option('--k', default=2)
 @click.option('--ds', default='10 20 30')
+@click.option('--pi-factors', default='1 1 1')
 @click.option('--lazy', default=True)
 def run_things_all_day_bb(
     data_dir,
     num_data,
     k,
     ds,
+    pi_factors,
     lazy):
 
     ds = [int(d) for d in ds.split()]
+    angles = [int(pf) * np.pi 
+              for pf in pi_factors.split()]
     pre_As = [np.random.randn(2*d, d)
               for d in ds]
     As = [np.dot(pre_A.T, pre_A)
           for pre_A in pre_As]
-    (lams, Qs) = unzip(
+    (_, Qs) = unzip(
         [np.linalg.eig(A) for A in As])
-    lams = [lam / np.max(lam)
-            for lam in lams]
-    lam_and_Q = zip(lams, Qs)
-    dynamics = [get_quadratic(Q, np.diag(lam))
-                for (lam, Q) in lam_and_Q]
+    zipped = zip(
+        ds, angles, Qs)
+    dynamics = [get_rotation(d, a, Q, P_inv=Q.T)
+                for (d, a, Q) in zipped]
     loaders = get_easy_DCCAPMLs(
         dynamics,
         num_data, 
         k,
         ds, 
         lazy=lazy) 
-    names = ['N', 'k', 'ds']
+    names = ['N', 'k', 'ds', 'pi_factors']
     vals = [
         str(num_data), 
         str(k),
-        '-'.join([str(d) for d in ds])]
+        '-'.join([str(d) for d in ds]),
+        '-'.join([str(pf) for pf in pi_factors])]
     dirname = get_ts('easy_cca' + '_' + '_'.join(
         [n + '-' + v for (n, v) in zip(names, vals)]))
     dirpath = os.path.join(data_dir, dirname)

@@ -48,7 +48,7 @@ class DynamicCCAProbabilisticModelLoader:
         self.mean = np.dot(QW, Z) + self.mu
 
         for t in range(Z.shape[0]):
-            self.mean[t:] *= self.lam
+            self.mean[:,t:] *= self.lam
 
         self.mean = np.dot(self.Q.T, self.mean)
         self.sd = get_svd_power(self.Psi, 0.5)
