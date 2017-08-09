@@ -10,7 +10,7 @@ from linal.utils import get_quadratic, get_rotation
 @click.command()
 @click.option('--data-dir')
 @click.option('--num-data', default=1000)
-@click.option('--k', default=1)
+@click.option('--k', default=2)
 @click.option('--ds', default='10 20 30')
 @click.option('--pi-factor', default=1)
 @click.option('--lazy', default=True)
