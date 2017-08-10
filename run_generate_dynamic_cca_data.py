@@ -24,7 +24,7 @@ def run_things_all_day_bb(
     lazy):
 
     ds = [int(d) for d in ds.split()]
-    angles = [int(pf) * np.pi 
+    angles = [float(pf) * np.pi 
               for pf in pi_factors.split()]
     pre_As = [np.random.randn(2*d, d)
               for d in ds]
