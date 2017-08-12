@@ -13,6 +13,7 @@ from linal.utils import get_quadratic, get_rotation
 @click.option('--k', default=2)
 @click.option('--ds', default='10 20 30')
 @click.option('--pi-factor', default=1.0)
+@click.option('--seed-factor', default=5.0)
 @click.option('--lazy', default=True)
 def run_things_all_day_bb(
     data_dir,
@@ -20,6 +21,7 @@ def run_things_all_day_bb(
     k,
     ds,
     pi_factor,
+    seed_factor,
     lazy):
 
     angle = pi_factor * np.pi
@@ -27,11 +29,14 @@ def run_things_all_day_bb(
     A = np.dot(pre_A.T, pre_A)
     (lam, Q) = np.linalg.eig(A)
     dynamics = get_rotation(k, angle, Q, P_inv=Q.T)
+    seed = np.random.randn(k, 1)
+    seed *= seed_factor / np.linalg.norm(seed)
     ds = [int(d) for d in ds.split()]
     loaders = get_lds_SCCAPMLs(
         num_data, 
         ds, 
         dynamics,
+        seed=seed,
         lazy=lazy) 
     names = ['N', 'k', 'ds']
     vals = [
