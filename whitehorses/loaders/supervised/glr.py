@@ -28,9 +28,7 @@ class LinearRegressionGaussianLoader:
         self.w = w
         self.y = np.dot(self.X, self.w)
 
-        if self.noise is not None:
-            self.y += self.noise
-        elif self.noisy:
+        if self.noisy:
             self.noise = np.random.randn(self.n, 1)
             self.y += self.noise
 

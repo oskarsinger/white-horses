@@ -242,7 +242,6 @@ def get_LRGL(
     n, 
     ps, 
     ws=None, 
-    noises=None, 
     noisys=False, 
     bias=False):
 
@@ -251,20 +250,16 @@ def get_LRGL(
     if ws is None:
         ws = [None] * len(ps)
 
-    if noises is None:
-        noises = [None] * len(ps)
-
     if not noisys:
         noisys = [False] * len(ps)
 
     info = zip(
         inner_loaders,
         ws,
-        noises,
         noisys)
     
-    return [LRGL(il, w=w, noise=ne, noisy=ny, bias=bias)
-            for (il, w, ne, ny) in info]
+    return [LRGL(il, w=w, noisy=ny, bias=bias)
+            for (il, w, ny) in info]
 
 def get_FPGL(n, ps, hertzes):
 
