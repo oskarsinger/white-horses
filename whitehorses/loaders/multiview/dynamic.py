@@ -41,6 +41,8 @@ class DynamicCCAProbabilisticModelLoader:
         self.d = self.W.shape[0]
         (self.k, self.num_data) = self.Z.shape
         (self.lam, self.Q) = np.linalg.eig(dynamics)
+        if np.any(np.iscomplex(self.lam)):
+            print(self.lam)
         self.lam = self.lam[:,np.newaxis]
 
         QW = np.dot(self.Q, self.W)
