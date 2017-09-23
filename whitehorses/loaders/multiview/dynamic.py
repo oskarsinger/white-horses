@@ -40,10 +40,8 @@ class DynamicCCAProbabilisticModelLoader:
 
         self.d = self.W.shape[0]
         (self.k, self.num_data) = self.Z.shape
-        (self.lam, self.Q) = np.linalg.eig(dynamics)
-        if np.any(np.iscomplex(self.lam)):
-            print(self.lam)
-        self.lam = self.lam[:,np.newaxis]
+        (lam, self.Q) = np.linalg.eig(dynamics)
+        self.lam = lam[:,np.newaxis]
 
         QW = np.dot(self.Q, self.W)
 
@@ -52,7 +50,7 @@ class DynamicCCAProbabilisticModelLoader:
         for t in range(Z.shape[0]):
             self.mean[:,t:] *= self.lam
 
-        self.mean = np.dot(self.Q.T, self.mean)
+        self.mean = np.dot(self.Q.H, self.mean)
         self.sd = get_svd_power(self.Psi, 0.5)
         self.data = None
 

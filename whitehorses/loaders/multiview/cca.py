@@ -136,6 +136,9 @@ class StaticCCAProbabilisticModelLoader:
         if self.data is None:
             self._set_data()
 
+        if np.any(np.iscomplex(self.data)):
+            print(self.data)
+
         return self.data
 
     def _set_data(self):

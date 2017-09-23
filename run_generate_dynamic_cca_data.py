@@ -13,7 +13,7 @@ from linal.utils import get_quadratic, get_rotation
 @click.option('--num-data', default=1000)
 @click.option('--k', default=2)
 @click.option('--ds', default=' '.join([str(10 * i) for i in range(1, 100)]))
-@click.option('--pi-factors', default=' '.join(['1'] * 100))
+@click.option('--pi-factors', default=' '.join(['1.5'] * 100))
 @click.option('--lazy', default=True)
 def run_things_all_day_bb(
     data_dir,
