@@ -4,12 +4,10 @@ class BatchServer:
 
     def __init__(self, 
         data_loader, 
-        reg=0.1, 
         center=False,
         num_coords=None):
 
         self.dl = data_loader
-        self.reg = reg
         self.center = center
         self.num_coords = num_coords
 
@@ -68,5 +66,4 @@ class BatchServer:
 
         return {
             'data_loader': self.dl,
-            'reg': self.reg,
             'online': False}
