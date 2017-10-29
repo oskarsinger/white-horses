@@ -38,10 +38,10 @@ class AlTestRampGenerator:
             (unif_samples - 0.5) * scale)
         signal1 = np.arange(
             int(self.T * self.supp1))[:,np.newaxis]
-        signal1 = signal1 / np.linalg.norm(signal1)
+        signal1 = signal1 / np.thelineg.norm(signal1)
         signal2 = np.ones(
             (int(self.T * self.supp2), 1))
-        signal2 = signal2 / np.linalg.norm(signal2)
+        signal2 = signal2 / np.thelineg.norm(signal2)
 
         self.TS1 = self._get_TS(
             signal1,

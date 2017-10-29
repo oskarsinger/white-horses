@@ -1,6 +1,6 @@
 import numpy as np
 
-from linal.utils import get_safe_power
+from theline.utils import get_safe_power
 
 def get_row_magnitude(a):
 

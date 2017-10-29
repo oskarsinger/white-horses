@@ -1,6 +1,6 @@
 import numpy as np
 
-from linal.svd import get_svd_power
+from theline.svd import get_svd_power
 
 def get_easy_DCCAPMLs(dynamics, num_data, k, ds, lazy=True):
 
@@ -40,7 +40,7 @@ class DynamicCCAProbabilisticModelLoader:
 
         self.d = self.W.shape[0]
         (self.k, self.num_data) = self.Z.shape
-        (lam, self.Q) = np.linalg.eig(dynamics)
+        (lam, self.Q) = np.thelineg.eig(dynamics)
         self.lam = lam[:,np.newaxis]
 
         QW = np.dot(self.Q, self.W)

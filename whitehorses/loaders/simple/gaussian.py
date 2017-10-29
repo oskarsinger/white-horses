@@ -1,7 +1,7 @@
 import numpy as np
 
-from linal.svd import get_svd_power
-from linal.random.utils import get_rank_k
+from theline.svd import get_svd_power
+from theline.random.utils import get_rank_k
 from drrobert.misc import get_checklist
 
 class GaussianLoader:

@@ -6,7 +6,7 @@ import numpy as np
 from whitehorses.loaders.multiview import get_easy_DCCAPMLs
 from drrobert.file_io import get_timestamped as get_ts
 from drrobert.misc import unzip
-from linal.utils import get_quadratic, get_rotation
+from theline.utils import get_quadratic, get_rotation
 
 @click.command()
 @click.option('--data-dir')
@@ -31,7 +31,7 @@ def run_things_all_day_bb(
     As = [np.dot(pre_A.T, pre_A)
           for pre_A in pre_As]
     (_, Qs) = unzip(
-        [np.linalg.eig(A) for A in As])
+        [np.thelineg.eig(A) for A in As])
     zipped = zip(
         ds, angles, Qs)
     dynamics = [get_rotation(d, a, Q, P_inv=Q.T)

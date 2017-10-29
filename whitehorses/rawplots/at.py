@@ -4,7 +4,7 @@ import seaborn as sns
 import whitehorses.loaders.shortcuts as dlstcts
 
 from whitehorses.servers.batch import BatchServer as BS
-from linal.utils.misc import get_non_nan
+from theline.utils.misc import get_non_nan
 from lazyprojector import plot_lines
 
 class ATRawDataPlotRunner:

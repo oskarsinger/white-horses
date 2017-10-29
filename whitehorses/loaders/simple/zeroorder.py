@@ -1,6 +1,6 @@
 import numpy as np
 
-from linal.utils.product import get_quadratic
+from theline.utils.product import get_quadratic
 
 class QuadraticZeroOrderLoader:
 

@@ -1,5 +1,5 @@
 from whitehorses.pseudodata import MissingData
-from linal.utils import get_array_mod
+from theline.utils import get_array_mod
 from math import ceil
 from datetime import datetime as DT
 from time import mktime

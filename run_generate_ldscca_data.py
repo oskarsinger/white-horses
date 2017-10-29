@@ -5,7 +5,7 @@ import numpy as np
 
 from whitehorses.loaders.multiview.cca import get_lds_SCCAPMLs
 from drrobert.file_io import get_timestamped as get_ts
-from linal.utils import get_quadratic, get_rotation
+from theline.utils import get_quadratic, get_rotation
 
 @click.command()
 @click.option('--data-dir')
@@ -27,10 +27,10 @@ def run_things_all_day_bb(
     angle = pi_factor * np.pi
     pre_A = np.random.randn(2*k, k)
     A = np.dot(pre_A.T, pre_A)
-    (lam, Q) = np.linalg.eig(A)
+    (lam, Q) = np.thelineg.eig(A)
     dynamics = get_rotation(k, angle, Q, P_inv=Q.T)
     seed = np.random.randn(k, 1)
-    seed *= seed_factor / np.linalg.norm(seed)
+    seed *= seed_factor / np.thelineg.norm(seed)
     ds = [int(d) for d in ds.split()]
     loaders = get_lds_SCCAPMLs(
         num_data, 
