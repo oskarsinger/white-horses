@@ -1,3 +1,3 @@
 from .glr import LinearRegressionGaussianLoader
 from .glr import ClassificationGaussianLoader
-from .svmplus import SVMPlusLoader
+from .svmplus import LinearSVMPlusLoader
