@@ -31,7 +31,7 @@ def run_things_all_day_bb(
     As = [np.dot(pre_A.T, pre_A)
           for pre_A in pre_As]
     (_, Qs) = unzip(
-        [np.thelineg.eig(A) for A in As])
+        [np.linalg.eig(A) for A in As])
     zipped = zip(
         ds, angles, Qs)
     dynamics = [get_rotation(d, a, Q, P_inv=Q.T)
