@@ -45,7 +45,7 @@ class LinearSVMPlusLoader:
         
         # Compute e, y, X_o for negative diff
         e_neg = diff[diff < 0][:,np.newaxis] * unnormed_Xw_o[diff < 0,:]
-        y[diff < 0] = - np.sign(e_neg)
+        y[diff < 0] = np.sign(e_neg)
         X_o[diff < 0,:] = np.power(np.absolute(e_neg), -1) * \
             unnormed_X_o[diff < 0,:]
         X_o[diff < 0] *= - np.random.uniform(
