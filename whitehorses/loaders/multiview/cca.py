@@ -2,8 +2,38 @@ import numpy as np
 
 from theline.svd import get_svd_power
 from theline.random import get_sparse_normal
+from theline.utils import get_simple_planted_clique as get_spc
 from whitehorses.loaders.simple import EmbeddedCosineLoader as ECL
+from whitehorses.loaders.simple import GaussianLoader as GL
 from whitehorses.loaders.dynamics import LinearDynamicsSequenceLoader as LDSL
+
+def get_SPC_SCCAPMLs(
+    num_data,
+    k,
+    ds,
+    rho=0.8,
+    seed=None,
+    lazy=True):
+
+    loader = GL(num_data, k)
+    Y = loader.get_data().T
+    Psi_z = get_spc(
+        k, rho=rho)
+    sqrt_Psi_z = get_svd_power(Psi_z, 0.5)
+    Z = np.dot(sqrt_Psi_z, Y)
+    Psi_inits = [np.random.randn(d * 2, d)
+                 for d in ds]
+    Psis = [np.dot(Pi.T, Pi) for Pi in Psi_inits]
+    Ws = [np.random.randn(d, k) for d in ds]
+    mus = [np.random.randn(d, 1) for d in ds]
+    zipped = zip(
+        Ws,
+        Psis,
+        mus)
+    SCCAPML = StaticCCAProbabilisticModelLoader
+
+    return [SCCAPML(W, Psi, mu, Z, lazy=lazy)
+            for (W, Psi, mu) in zipped]
 
 # TODO: cite the Francis Bach and Fu 2016 papers
 def get_lds_SCCAPMLs(
