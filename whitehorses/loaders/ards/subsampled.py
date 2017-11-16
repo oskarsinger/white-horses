@@ -34,7 +34,8 @@ class ARDSSubsampledEHRLUPILoader:
                           for l in lines]
             as_np_array = np.array(as_numbers)
             X_o = as_np_array[:,8:-1]
-            X_p = as_np_array[:,-1]
+            X_p = whitehorses.utils.get_one_hots(
+                as_np_array[:,-1].astype(int))
             y = as_np_array[:,2]
             c = as_np_array[:,3]
 
