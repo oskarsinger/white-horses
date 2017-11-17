@@ -34,21 +34,16 @@ class ARDSSubsampledEHRLUPILoader:
                      for l in f]
             as_numbers = [[float(i) for i in l]
                           for l in lines]
-            as_numbers = [l if len(l) == 33 else l + [-1]
-                          for l in as_numbers]
             as_np_array = np.array(as_numbers)
             pre_X_p = as_np_array[:,-1]
-
-            pre_X_p += 1
-
             X_o = as_np_array[:,8:-1]
             X_p = np.zeros((X_o.shape[0], 8))
 
             to_one_hotify = pre_X_p[pre_X_p > 0].astype(int)
             X_p[pre_X_p > 0,:] = get_oh(to_one_hotify)
 
-            y = as_np_array[:,2]
-            c = as_np_array[:,3]
+            y = as_np_array[:,2][:,np.newaxis]
+            c = as_np_array[:,3][:,np.newaxis]
 
             if self.uncertain:
                 self.data = (X_o, X_p, y, c)

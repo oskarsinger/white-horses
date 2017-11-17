@@ -8,7 +8,9 @@ def get_one_hots(A):
     one_hots = np.zeros((N, num_unique))
     
     for (i, u) in enumerate(unique):
-        one_hots[A == unique, i] = 1
+        one_hots[A == u, i] = 1
+
+    return one_hots
 
 def get_minibatch(A, batch_size):
 
