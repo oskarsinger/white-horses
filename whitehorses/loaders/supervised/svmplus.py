@@ -6,7 +6,9 @@ class LinearSVMPlusLoader:
         observable_loader,
         privileged_loader,
         max_distance_from_margin=5,
-        bias=False):
+        bias=False,
+        w_o_init=None,
+        w_p_init=None):
 
         self.oloader = observable_loader
         self.ploader = privileged_loader
@@ -17,11 +19,25 @@ class LinearSVMPlusLoader:
         self.p_cols = self.ploader.cols()
         self.n = self.oloader.rows()
 
-        # TODO: reassess whether this is a good way to initialize ws
-        self.w_o = np.random.randn(self.o_cols, 1)
-        self.w_p = np.random.randn(self.p_cols, 1)
+        if w_o_init is None:
+            w_o_init = np.random.randn(self.o_cols, 1)
+
+        self.w_o = w_o_init
+
+        if w_p_init is None:
+            w_p_init = np.random.randn(self.p_cols, 1)
+
+        self.w_p = w_p_init
+        self.data = None
 
     def get_data(self):
+
+        if self.data is None:
+            self._set_data()
+
+        return self.data
+
+    def _set_data(self):
 
         unnormed_X_o = self.oloader.get_data()
         unnormed_Xw_o = np.dot(unnormed_X_o, self.w_o)
@@ -62,7 +78,7 @@ class LinearSVMPlusLoader:
             high=self.max_distance,
             size=diff[diff == 0].shape[0])[:,np.newaxis]
 
-        return (X_o, X_p, y)
+        self.data = (X_o, X_p, y)
 
     def name(self):
 
