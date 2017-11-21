@@ -4,7 +4,7 @@ def get_random_k_folds(N, k):
 
     indexes = np.arange(N)
     
-    np.shuffle(indexes)
+    np.random.shuffle(indexes)
 
     size = int(N / k)
     holdouts = [indexes[size*i:size*(i+1)]
