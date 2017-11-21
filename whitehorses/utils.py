@@ -1,5 +1,19 @@
 import numpy as np
 
+def get_random_k_folds(N, k):
+
+    indexes = np.arange(N)
+    
+    np.shuffle(indexes)
+
+    size = int(N / k)
+    holdouts = [indexes[size*i:size*(i+1)]
+                for i in range(k)]
+    folds = [np.hstack(holdouts[:i] + holdouts[i+1:])
+             for i in range(k)]
+
+    return zip(folds, holdouts)
+    
 def get_one_hots(A):
 
     N = A.shape[0]
