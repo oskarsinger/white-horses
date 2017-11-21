@@ -12,7 +12,7 @@ def get_random_k_folds(N, k):
     folds = [np.hstack(holdouts[:i] + holdouts[i+1:])
              for i in range(k)]
 
-    return zip(folds, holdouts)
+    return list(zip(folds, holdouts))
     
 def get_one_hots(A):
 
