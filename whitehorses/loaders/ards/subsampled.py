@@ -42,9 +42,9 @@ class ARDSSubsampledEHRLoader:
             c = as_np_array[:,3][:,np.newaxis]
 
             if self.uncertain:
-                self.data = (X_o, X_p, y, c)
+                self.data = (X, y, c)
             else:
-                self.data = (X_o, X_p, y)
+                self.data = (X, y)
 
     def cols(self):
 
