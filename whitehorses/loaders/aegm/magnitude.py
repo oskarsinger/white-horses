@@ -15,6 +15,7 @@ class AEGMMagnitudeLoader:
         self.path = os.path.join(
             data_dir,
             'mHealth_subject' + str(self.subject) + '.log')
+        self.hertz = 50
         self.data = None
 
         if not self.lazy:
@@ -54,3 +55,7 @@ class AEGMMagnitudeLoader:
     def rows(self):
 
         return self.data.shape[0]
+
+    def name(self):
+
+        return 'AEGMMagnitudeLoader'
