@@ -22,7 +22,7 @@ class AEGMMagnitudeLoader:
 
     def get_data(self):
 
-        if self.data:
+        if self.data is None:
             self._set_data()
 
         return self.data
@@ -33,15 +33,15 @@ class AEGMMagnitudeLoader:
         labels = raw_data[:,-1]
         mag_data = np.zeros((raw_data.shape[0], 9))
 
-        mag_data[0,:] = np.linalg.norm(raw_data[:,:3], axis=1)
-        mag_data[1,:] = raw_data[:,3]
-        mag_data[2,:] = raw_data[:,4]
-        mag_data[3,:] = np.linalg.norm(raw_data[:,5:8], axis=1)
-        mag_data[4,:] = np.linalg.norm(raw_data[:,8:11], axis=1)
-        mag_data[5,:] = np.linalg.norm(raw_data[:,11:14], axis=1)
-        mag_data[6,:] = np.linalg.norm(raw_data[:,14:17], axis=1)
-        mag_data[7,:] = np.linalg.norm(raw_data[:,17:20], axis=1)
-        mag_data[8,:] = np.linalg.norm(raw_data[:,20:23], axis=1)
+        mag_data[:,0] = np.linalg.norm(raw_data[:,:3], axis=1)
+        mag_data[:,1] = raw_data[:,3]
+        mag_data[:,2] = raw_data[:,4]
+        mag_data[:,3] = np.linalg.norm(raw_data[:,5:8], axis=1)
+        mag_data[:,4] = np.linalg.norm(raw_data[:,8:11], axis=1)
+        mag_data[:,5] = np.linalg.norm(raw_data[:,11:14], axis=1)
+        mag_data[:,6] = np.linalg.norm(raw_data[:,14:17], axis=1)
+        mag_data[:,7] = np.linalg.norm(raw_data[:,17:20], axis=1)
+        mag_data[:,8] = np.linalg.norm(raw_data[:,20:23], axis=1)
 
         mag_mean = np.mean(mag_data, axis=0)
 
