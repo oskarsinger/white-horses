@@ -1,2 +1,2 @@
-from .magnitude import AEGMMagnitudeLoader
 from .utils import *
+from .magnitude import AEGMMagnitudeLoader
