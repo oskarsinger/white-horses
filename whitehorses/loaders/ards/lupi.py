@@ -47,9 +47,9 @@ class ARDSSubsampledEHRLUPILoader:
             X_p[pre_X_p > 0,:-1] = get_oh(to_one_hotify)
 
             y = as_np_array[:,2][:,np.newaxis]
-            c = as_np_array[:,3][:,np.newaxis]
 
             if self.uncertain:
+                c = as_np_array[:,3][:,np.newaxis]
                 self.data = (X_o, X_p, y, c)
             else:
                 self.data = (X_o, X_p, y)
@@ -77,3 +77,83 @@ class ARDSSubsampledEHRLUPILoader:
     def refresh(self):
 
         self.data = None
+
+class ARDSSubsampledEHRMissingLUPILoader:
+
+    def __init__(self, 
+        csv_path,
+        uncertain=False,
+        lazy=True):
+
+        self.csv_path = csv_path
+        self.uncertain = uncertain
+        self.lazy = lazy
+
+        self.data = None
+
+        if not self.lazy:
+            self._set_data()
+
+    def get_data(self):
+
+        if self.data is None:
+            self._set_data()
+
+        return self.data
+
+    def _set_data(self):
+
+        with open(self.csv_path) as f:
+            lines = [l.strip().split(',')
+                     for l in f]
+            as_numbers = [[float(i) for i in l]
+                          for l in lines]
+            as_np_array = np.array(as_numbers)
+            pre_X_p = as_np_array[:,-1]
+            X_o = np.hstack([
+                as_np_array[:,8:-1], 
+                np.ones((as_np_array.shape[0], 1))])
+            X_o_missing = X_o[pre_X_p == 0,:]
+            X_o_not_missing = X_o[pre_X_p > 0,:]
+            X_p = np.hstack([
+                np.zeros((X_o_not_missing.shape[0], 8)),
+                np.ones((X_o_not_missing.shape[0], 1))])
+
+            to_one_hotify = pre_X_p[pre_X_p > 0].astype(int)
+            X_p[:,:-1] = get_oh(to_one_hotify)
+
+            y_missing = as_np_array[:,2][pre_X_p == 0,np.newaxis]
+            y_not_missing = as_np_array[:,2][pre_X_p > 0,np.newaxis]
+
+            if self.uncertain:
+                c = as_np_array[:,3][:,np.newaxis]
+                self.data = (X_o_missing, X_o_not_missing, X_p, y_missing, y_not_missing, c)
+            else:
+                self.data = (X_o_missing, X_o_not_missing, X_p, y_missing, y_not_missing)
+
+    def cols(self):
+
+        cols = 0
+
+        if self.data is not None:
+            c_o = self.data[0].shape[1]
+            c_p = self.data[1].shape[1]
+            cols = c_o + c_p
+
+        return cols
+
+    def rows(self):
+
+        rows = 0
+
+        if self.data is not None:
+            rows_missing = self.data[0].shape[0]
+            rows_not_missing = self.data[1].shape[0]
+            rows = row_missing + rows_not_missing
+
+        return rows
+
+    def refresh(self):
+
+        self.data = None
+
