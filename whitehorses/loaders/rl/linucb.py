@@ -44,7 +44,8 @@ class ActionInactionLinUCBLoader:
         (action, action_fs) = self.a_history[-1]
         x = np.vstack([
             self.current_z,
-            action_fs])
+            action_fs,
+            1])
         r = np.dot(self.w.T, x)[0]
 
         if self.noisy:
@@ -56,7 +57,7 @@ class ActionInactionLinUCBLoader:
 
     def get_max_reward(self, action_fs):
 
-        xs = [np.vstack([self.current_z, af])
+        xs = [np.vstack([self.current_z, af, 1])
               for af in action_fs]
         rs = [np.dot(self.w.T, x)[0]
               for x in xs]
