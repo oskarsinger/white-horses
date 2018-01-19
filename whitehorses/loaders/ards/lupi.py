@@ -137,7 +137,7 @@ class ARDSSubsampledEHRMissingLUPILoader:
 
         if self.data is not None:
             c_o = self.data[0].shape[1]
-            c_p = self.data[1].shape[1]
+            c_p = self.data[2].shape[1]
             cols = c_o + c_p
 
         return cols
@@ -149,7 +149,7 @@ class ARDSSubsampledEHRMissingLUPILoader:
         if self.data is not None:
             rows_missing = self.data[0].shape[0]
             rows_not_missing = self.data[1].shape[0]
-            rows = row_missing + rows_not_missing
+            rows = rows_missing + rows_not_missing
 
         return rows
 
