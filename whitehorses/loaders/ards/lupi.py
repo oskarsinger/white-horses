@@ -30,22 +30,28 @@ class ARDSSubsampledEHRLUPILoader:
     def _set_data(self):
 
         with open(self.csv_path) as f:
+            # Set text as numpy array
             lines = [l.strip().split(',')
                      for l in f]
             as_numbers = [[float(i) for i in l]
                           for l in lines]
             as_np_array = np.array(as_numbers)
+
+            # Turn privileged info into binary representation
             pre_X_p = as_np_array[:,-1]
+            reduced_pre_X_p = np.zeros((pre_X_p.shape[0], 2))
+            reduced_pre_X_p[pre_X_p > 0,0] = 1
+            reduced_pre_X_p[pre_X_p > 4,1] = 1
+            X_p = np.hstack([
+                np.zeros((X_o.shape[0], 2)),
+                np.ones((X_o.shape[0], 1))])
+
+            X_p[pre_X_p > 0,:-1] = reduced_pre_X_p
+
+            # Set observable info and labels
             X_o = np.hstack([
                 as_np_array[:,8:-1], 
                 np.ones((as_np_array.shape[0], 1))])
-            X_p = np.hstack([
-                np.zeros((X_o.shape[0], 8)),
-                np.ones((X_o.shape[0], 1))])
-
-            to_one_hotify = pre_X_p[pre_X_p > 0].astype(int)
-            X_p[pre_X_p > 0,:-1] = get_oh(to_one_hotify)
-
             y = as_np_array[:,2][:,np.newaxis]
 
             if self.uncertain:
