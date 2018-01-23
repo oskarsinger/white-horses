@@ -5,6 +5,7 @@ class LinearSVMPlusLoader:
     def __init__(self,
         observable_loader,
         privileged_loader,
+        fraction_flipped=None,
         max_distance_from_margin=5,
         bias=False,
         w_o_init=None,
@@ -12,6 +13,7 @@ class LinearSVMPlusLoader:
 
         self.oloader = observable_loader
         self.ploader = privileged_loader
+        self.fraction_flipped = fraction_flipped
         self.max_distance = max_distance_from_margin
         self.bias = bias
 
@@ -77,6 +79,14 @@ class LinearSVMPlusLoader:
             low=1, 
             high=self.max_distance,
             size=diff[diff == 0].shape[0])[:,np.newaxis]
+
+        if self.fraction_flipped is not None:
+            size = int(self.fraction_flipped * self.oloader.rows())
+            flipped = np.random.choice(
+                self.oloader.rows(),
+                size,
+                replace=False)
+            y[flipped] = -y[flipped]
 
         self.data = (X_o, X_p, y)
 
