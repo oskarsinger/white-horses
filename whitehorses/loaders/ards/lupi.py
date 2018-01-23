@@ -121,15 +121,15 @@ class ARDSSubsampledEHRMissingLUPILoader:
                 np.ones((as_np_array.shape[0], 1))])
             X_o_missing = X_o[pre_X_p == 0,:]
             X_o_not_missing = X_o[pre_X_p > 0,:]
-            X_p = np.hstack([
-                np.zeros((X_o_not_missing.shape[0], 8)),
-                np.ones((X_o_not_missing.shape[0], 1))])
-
-            to_one_hotify = pre_X_p[pre_X_p > 0].astype(int)
-            X_p[:,:-1] = get_oh(to_one_hotify)
-
             y_missing = as_np_array[:,2][pre_X_p == 0,np.newaxis]
             y_not_missing = as_np_array[:,2][pre_X_p > 0,np.newaxis]
+
+            X_p = np.hstack([
+                np.zeros((X_o_not_missing.shape[0], 1)),
+                np.ones((X_o_not_missing.shape[0], 1))])
+            pre_X_p = pre_X_p[pre_X_p > 0]
+            X_p[pre_X_p > 4,0] = 1
+
 
             if self.uncertain:
                 c = as_np_array[:,3][:,np.newaxis]
