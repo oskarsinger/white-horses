@@ -5,7 +5,7 @@ class LinearSVMPlusLoader:
     def __init__(self,
         observable_loader,
         privileged_loader,
-        fraction_flipped=None,
+        fraction_flipped=0.1,
         max_distance_from_margin=5,
         bias=False,
         w_o_init=None,
