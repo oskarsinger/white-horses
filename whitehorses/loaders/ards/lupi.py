@@ -42,16 +42,14 @@ class ARDSSubsampledEHRLUPILoader:
             reduced_pre_X_p = np.zeros((pre_X_p.shape[0], 2))
             reduced_pre_X_p[pre_X_p > 0,0] = 1
             reduced_pre_X_p[pre_X_p > 4,1] = 1
-            X_p = np.hstack([
-                np.zeros((X_o.shape[0], 2)),
-                np.ones((X_o.shape[0], 1))])
-
-            X_p[pre_X_p > 0,:-1] = reduced_pre_X_p
-
-            # Set observable info and labels
             X_o = np.hstack([
                 as_np_array[:,8:-1], 
                 np.ones((as_np_array.shape[0], 1))])
+            X_p = np.hstack([
+                reduced_pre_X_p,
+                np.ones((X_o.shape[0], 1))])
+
+            # Set observable info and labels
             y = as_np_array[:,2][:,np.newaxis]
 
             if self.uncertain:
