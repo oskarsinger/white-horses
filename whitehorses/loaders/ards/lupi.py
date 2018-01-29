@@ -37,20 +37,44 @@ class ARDSSubsampledEHRLUPILoader:
                           for l in lines]
             as_np_array = np.array(as_numbers)
 
-            # Turn privileged info into binary representation
+            # Get labels and binary version for privileged info
+            y = as_np_array[:,2][:,np.newaxis]
+            y_binary = np.zeros_like(y)
+            y_binary[y == 1] = 1
+
+            # Turn x-ray-based-rating into binary representation
             pre_X_p = as_np_array[:,-1]
             reduced_pre_X_p = np.zeros((pre_X_p.shape[0], 2))
             reduced_pre_X_p[pre_X_p > 0,0] = 1
             reduced_pre_X_p[pre_X_p > 4,1] = 1
+
+            # Compute privileged info based on compatibility with binary y
+            expanded_pre_X_p = np.zeros((pre_X_p.shape[0], 5))
+            pos_and_agree = np.logical_and(
+                pre_X_p[:,1] == 1,
+                pre_X_p[:,1] == y[:,0])
+            expanded_pre_X_p[:,0] = pre_X_p[:,0]
+            expanded_pre_X_p[pos_and_agree,1] = 1
+            neg_and_agree = np.logical_and(
+                pre_X_p[:,1] == 0,
+                pre_X_p[:,1] == y[:,0])
+            expanded_pre_X_p[neg_and_agree,2] = 1
+            pos_and_disagree = np.logical_and(
+                pre_X_p[:,1] == 1,
+                np.logical_not(pre_X_p[:,1] == y[:,0]))
+            expanded_pre_X_p[pos_and_disagree,3] = 1
+            neg_and_disagree = np.logical_and(
+                pre_X_p[:,1] == 0,
+                np.logical_not(pre_X_p[:,1] == y[:,0]))
+            expanded_pre_X_p[neg_and_disagree,4] = 1
+            X_p = np.hstack([
+                expanded_pre_X_p,
+                np.ones((pre_X_p.shape[0], 1))])
+
+            # Set observable info and labels
             X_o = np.hstack([
                 as_np_array[:,8:-1], 
                 np.ones((as_np_array.shape[0], 1))])
-            X_p = np.hstack([
-                reduced_pre_X_p,
-                np.ones((X_o.shape[0], 1))])
-
-            # Set observable info and labels
-            y = as_np_array[:,2][:,np.newaxis]
 
             if self.uncertain:
                 c = as_np_array[:,3][:,np.newaxis]
