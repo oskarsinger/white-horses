@@ -76,14 +76,13 @@ class BernoulliGaussianCCALUPILoader:
 
         # Generate labels y
         y = BL(self.n, 1, p=self.p).get_data()
-        y[(y == 0)[:,0],:] = -1
 
         # Generate noise for hidden variables
         Z = np.random.randn(self.k, self.n)
 
         # Add mean to hidden variables
         Z[:,(y == 1)[:,0]] += self.mu_zpos
-        Z[:,(y == -1)[:,0]] += self.mu_zneg
+        Z[:,(y == 0)[:,0]] += self.mu_zneg
 
         # Generate Xo and Xp
         X_o = SCCAPML(
@@ -103,6 +102,6 @@ class BernoulliGaussianCCALUPILoader:
                 y.shape[0],
                 size,
                 replace=False)
-            y[flipped] = -y[flipped]
+            y[flipped,:] = 1 - y[flipped,:]
 
         self.data = (X_o, X_p, y)
