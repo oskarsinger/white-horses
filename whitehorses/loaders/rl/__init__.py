@@ -1,3 +1,2 @@
-from .network import ExposureShiftedGaussianWithBaselineEffectLoader
 from .linucb import ActionInactionLinUCBLoader
 from .linucb import LinUCBLoader
