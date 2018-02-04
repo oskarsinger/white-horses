@@ -7,7 +7,6 @@ from . import supervised
 from . import simple
 from . import mixture
 from . import multiview
-from . import ards
 from . import aegm
 
 from . import shortcuts
