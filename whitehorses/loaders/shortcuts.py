@@ -13,61 +13,7 @@ from .supervised import LinearRegressionGaussianLoader as LRGL
 from .readers import from_num as fn
 from .at import AlTestSpikeLoader as ATSL
 from .at import AlTestRampGenerator as ATRG
-from .rl import ExposureShiftedGaussianWithBaselineEffectLoader as ESGWBEL
 from drrobert.random import rademacher
-
-def get_er_ESGWBEL(
-    num_nodes,
-    graph_p=0.6,
-    rad_p=0.9,
-    mus=None,
-    sigmas=None,
-    baseline_mus=None,
-    baseline_sigmas=None):
-
-    network = drn.get_erdos_renyi(
-        num_nodes, graph_p, sym=True)
-    adj_lists = drn.get_adj_lists(network)
-    signs = rademacher(
-        p=rad_p, size=num_nodes).tolist()
-
-    if mus is None:
-        mus = np.random.uniform(
-            size=num_nodes, 
-            low=-5, 
-            high=5).tolist()
-
-    if sigmas is None:
-        sigmas = np.random.uniform(
-            size=num_nodes, low=1, high=5)
-
-    if baseline_mus is None:
-        baseline_mus = [0] * num_nodes
-
-    if baseline_sigmas is None:
-        baseline_sigmas = [0] * num_nodes
-
-    nodes = []
-
-    for i in range(num_nodes):
-        node = ESGWBEL(
-            signs[i],
-            mus[i],
-            sigmas[i],
-            i,
-            baseline_mu=baseline_mus[i],
-            baseline_sigma=baseline_sigmas[i])
-
-        nodes.append(node)
-
-    for i in range(num_nodes):
-        neighbors = [nodes[k]
-                     for (k, j) in enumerate(adj_lists[i])
-                     if j == 1]
-
-        nodes[i].set_neighbors(neighbors)
-
-    return nodes
 
 def get_cm_loaders_all_subjects(filepath):
 
