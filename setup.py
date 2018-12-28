@@ -5,7 +5,6 @@ setup(
     version='0.01',
     packages=[
         'whitehorses',
-        'whitehorses.rawplots',
         'whitehorses.errors',
         'whitehorses.loaders',
         'whitehorses.loaders.e4',

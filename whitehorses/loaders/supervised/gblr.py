@@ -26,28 +26,36 @@ class BilinearLogisticRegressionLoader:
 
         self.W = W
         inside_exp = get_multi_dot(
-            [self.X1.T, self.W, self.X2])
+            [self.X1.T, self.W, self.X2]
+        )
         self.probs = np.power(
             1 + np.exp(inside_exp),
-            -1)
+            -1
+        )
 
         if self.noisy:
             # TODO: figure this out later
-            pass
+            raise Exception(
+                'Noisy bilinear logistic regression data not implemented.'
+            )
 
         self.y = (self.probs > 0.5).astype(float)
+
 
     def get_data(self):
 
         return (self.X1, self.X2, self.y)
 
+
     def name(self):
 
         return 'BilinearLogisticRegressionLoader'
 
+
     def cols(self):
 
         return (self.p1, self.p2)
+
 
     def rows(self):
 
